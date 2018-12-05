@@ -39,7 +39,8 @@ class UserColectableAttribute {
 
     definition.type = UserColectableAttribute.resolveType(definition);
     if (isAttestableValue(value)) {
-      throw new Error('UserCollectableAttribute must not receive attestable value');
+      this.value = value;
+      this.initializeAttestableValue();
     } else if (UserColectableAttribute.isValueOfType(value, this.type)) {
       // Trying to construct UCA with a normal value
       this.timestamp = timestamp.now();
@@ -63,6 +64,10 @@ class UserColectableAttribute {
     }
 
     this.id = `${this.version}:${this.identifier}:${uuidv4()}`;
+  }
+
+  initializeAttestableValue() {
+    throw new Error(`UserCollectableAttribute must not receive attestable value: ${JSON.stringify(this.value)}`);
   }
 
   getPlainValue(propName) {

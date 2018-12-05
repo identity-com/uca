@@ -150,7 +150,8 @@ describe('UCA Constructions tests', () => {
       expect(v).toBeUndefined();
     } catch (e) {
       expect(e).toBeDefined();
-      expect(e.message).toBe('UserCollectableAttribute must not receive attestable value');
+      expect(e.message).toBeDefined();
+      expect(e.message.indexOf('UserCollectableAttribute must not receive attestable value') >= 0).toBeTruthy();
     }
   });
 
