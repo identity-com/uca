@@ -82,7 +82,7 @@ describe('UCA Constructions tests', () => {
   });
 
 
-  test('UCA has type String', () => {
+  test('cvc:Verify:phoneNumberToken must have type equals String', () => {
     const identifier = 'cvc:Verify:phoneNumberToken';
     const value = '12345';
     const v = new UCA(identifier, value);
@@ -90,7 +90,7 @@ describe('UCA Constructions tests', () => {
     expect(v.type).toEqual('String');
   });
 
-  test('UCA has type Object:cvc:Identity:name', () => {
+  test('Creation of Name must return type of object', () => {
     const identifier = 'cvc:Identity:name';
     const value = {
       givenNames: 'joao',
@@ -100,7 +100,7 @@ describe('UCA Constructions tests', () => {
     expect(v.type).toEqual('Object');
   });
 
-  test('UCA has incorrect object value', () => {
+  test('Creation of cvc:Identity:name successfuly', () => {
     const identifier = 'cvc:Identity:name';
     const value = {
       givenNames: 'Joao Paulo',
@@ -115,7 +115,7 @@ describe('UCA Constructions tests', () => {
     expect(v.value.familyNames.value).toEqual('Barbosa Marques dos Santos');
   });
 
-  test('UCA has incorrect complex object value', () => {
+  test('Creating date of birth UCA successfuly', () => {
     const identifier = 'cvc:Identity:dateOfBirth';
     const value = {
       day: 20,
@@ -124,26 +124,27 @@ describe('UCA Constructions tests', () => {
     };
     const v = new UCA(identifier, value);
     expect(v).toBeDefined();
+    expect(v.value.day.value).toBe(value.day);
+    expect(v.value.month.value).toBe(value.month);
+    expect(v.value.year.value).toBe(value.year);
   });
 
-
-  test('Construct NameGivenNames', () => {
+  test('Construct by NameGivenNames must result successfuly', () => {
     const v = new UCA.NameGivenNames('Joao');
     expect(v).toBeDefined();
+    expect(v.value).toBe('Joao');
   });
 
-  test('Construct NameGivenNames', () => {
-    const v = new UCA.IdentityName({ givenNames: 'Joao', otherNames: 'Barbosa', familyNames: 'Santos' });
+  test('Construct IdentityName must result successfuly', () => {
+    const value = { givenNames: 'Joao', otherNames: 'Barbosa', familyNames: 'Santos' };
+    const v = new UCA.IdentityName(value);
     expect(v).toBeDefined();
+    expect(v.value.givenNames.value).toBe(value.givenNames);
+    expect(v.value.otherNames.value).toBe(value.otherNames);
+    expect(v.value.familyNames.value).toBe(value.familyNames);
   });
 
-
-  test('UCA return complex/multiple Attestatble Values', () => {
-    const v = new UCA.IdentityName({ givenNames: 'Joao', otherNames: 'Barbosa', familyNames: 'Santos' });
-    expect(v).toBeDefined();
-  });
-
-  test('UCA should Construct with a complex Attestatble Value: cvc:Identity:name', () => {
+  test('UCA should throw error when constructing with a complex Attestatble Value: cvc:Identity:name', () => {
     try {
       // eslint-disable-next-line max-len
       const aComplexAttestableValue = 'urn:name.familyNames:c443e0a97a2df34573f910927e25c58e597e211152dfb650e6210facacc1a065:Santos|urn:name.givenNames:f14ab211784a3b3d2f20d423847a775ad56c3be8104a51aa084f0c94756d953b:Joao|urn:name.otherNames:09a31dab0a537ac5330a07df63effd9d2f55e91845956b58119843835f7dd9ed:Barbosa|';
