@@ -62,7 +62,6 @@ class UserColectableAttribute {
       }), 'key'), 'value');
       this.value = ucaValue;
     }
-
     this.id = `${this.version}:${this.identifier}:${uuidv4()}`;
   }
 
@@ -101,18 +100,6 @@ class UserColectableAttribute {
         return newParent;
     }
   }
-
-  toJSON() {
-    return {
-      id: this.id,
-      identifier: this.identifier,
-      timestamp: this.timestamp,
-      version: this.version,
-      type: this.type,
-      value: this.value,
-    };
-  }
-
 
   /**
    * validate the value type

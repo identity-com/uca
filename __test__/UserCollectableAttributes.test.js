@@ -1,4 +1,5 @@
 const UCA = require('../src/UserCollectableAttribute');
+const ucaIndex = require('../src');
 
 describe('UCA Constructions tests', () => {
   test('UCA construction should fails', () => {
@@ -209,6 +210,7 @@ describe('UCA Constructions tests', () => {
     expect(plain.unit).toBe('12');
     expect(plain.postalCode).toBe('15123');
     expect(plain.street).toBe('Ruthllardstr');
+    expect(address.id).toBeDefined();
   });
 
   test('Should get ALL UCA properties email', () => {
@@ -225,5 +227,34 @@ describe('UCA Constructions tests', () => {
     expect(properties).toContain('identity.name.givenNames');
     expect(properties).toContain('identity.name.familyNames');
     expect(properties).toContain('identity.name.otherNames');
+  });
+
+  test('Index initialization', () => {
+    expect(ucaIndex).toBeDefined();
+    expect(ucaIndex.definitions).toBeDefined();
+    expect(ucaIndex.UserCollectableAttribute).toBeDefined();
+  });
+
+  test('UCA with attestable value must throw error', () => {
+    const identifier = 'cvc:Type:address';
+    const attestableValue = {
+      country: 'DE',
+      state: 'Berlin',
+      county: 'Berlin',
+      city: 'Berlin',
+      postalCode: '15123',
+      street: 'Ruthllardstr',
+      unit: '12',
+      attestableValue: 'Mocked:asdkmalsdqasd',
+    };
+    try {
+      const uca = new UCA(identifier, attestableValue);
+      expect(uca).toBe('Should not pass here');
+    } catch (e) {
+      expect(e).toBeDefined();
+      expect(e.message).toBe(
+        `UserCollectableAttribute must not receive attestable value: ${JSON.stringify(attestableValue)}`,
+      );
+    }
   });
 });
