@@ -1,6 +1,6 @@
 {
   "name": "@identity.com/uca",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "Provides functionality around User Collectable Attributes (UCA)",
   "main": "src/index.js",
   "module": "dist/es/index.js",
@@ -16,7 +16,8 @@
     "build:browser:after": "minify dist/prebrowser -d dist/browser",
     "build:browser:clean": "rimraf dist/prebrowser",
     "build:browser": "npm run build:browser:before && npm run build:browser:after && npm run build:browser:clean",
-    "build": "npm run build:browser && npm run build:cjs && npm run build:es"
+    "build": "npm run build:browser && npm run build:cjs && npm run build:es",
+    "tag": "git tag v$npm_package_version && git push --tags origin master"
   },
   "author": "Identity.com Community",
   "license": "MIT",
