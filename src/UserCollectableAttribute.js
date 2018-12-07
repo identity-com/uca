@@ -57,7 +57,7 @@ class UserColectableAttribute {
       }
       const ucaValue = _.mapValues(_.keyBy(_.map(value, (v, k) => {
         const propertyDef = _.find(definition.type.properties, { name: k });
-        const uca = new UserColectableAttribute(propertyDef.type, v, propertyDef.version);
+        const uca = new this.constructor(propertyDef.type, v, propertyDef.version);
         return { key: k, value: uca };
       }), 'key'), 'value');
       this.value = ucaValue;
