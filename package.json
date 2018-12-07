@@ -17,7 +17,10 @@
     "build:browser:clean": "rimraf dist/prebrowser",
     "build:browser": "npm run build:browser:before && npm run build:browser:after && npm run build:browser:clean",
     "build": "npm run build:browser && npm run build:cjs && npm run build:es",
-    "tag": "git tag v$npm_package_version && git push --tags origin master"
+    "tag": "git tag v$npm_package_version && git push --tags origin master",
+    "pretag": "git fetch --tags",
+    "precommit": "npm run lint",
+    "postversion": "git checkout master && git add --all && git commit -m\"build and version $npm_package_version\" -m\"[skip ci]\" && git push origin master"
   },
   "author": "Identity.com Community",
   "license": "MIT",
