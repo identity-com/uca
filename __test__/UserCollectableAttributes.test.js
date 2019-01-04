@@ -129,6 +129,20 @@ describe('UCA Constructions tests', () => {
     expect(v.value.year.value).toBe(value.year);
   });
 
+  test('Creating date of birth UCA successfuly', () => {
+    const identifier = 'cvc:Identity:dateOfBirth';
+    const value = {
+      day: 32,
+      month: 2,
+      year: 1978,
+    };
+    function createUCA() {
+      return new UCA(identifier, value);
+    }
+
+    expect(createUCA).toThrowError('32 is not valid for cvc:Type:day');
+  });
+
   test('Construct by NameGivenNames must result successfuly', () => {
     const v = new UCA.NameGivenNames('Joao');
     expect(v).toBeDefined();
