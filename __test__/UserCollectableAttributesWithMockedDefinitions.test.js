@@ -36,4 +36,18 @@ describe('UCA Constructions tests', () => {
     const uca = new UCA(identifier, value);
     expect(uca).toBeDefined();
   });
+
+  test('Creating date of birth UCA successfuly', () => {
+    const identifier = 'cvc:Identity:dateOfBirth';
+    const value = {
+      day: 20,
+      month: 3,
+      year: 1978,
+    };
+    const v = new UCA(identifier, value);
+    expect(v).toBeDefined();
+    expect(v.value.day.value).toBe(value.day);
+    expect(v.value.month.value).toBe(value.month);
+    expect(v.value.year.value).toBe(value.year);
+  });
 });

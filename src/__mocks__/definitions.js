@@ -72,6 +72,13 @@ const definitions = [
     credentialItem: false,
   },
   {
+    identifier: 'cvc:Type:year',
+    version: '1',
+    type: 'Number',
+    minimum: 1900,
+    exclusiveMinimum: true,
+  },
+  {
     identifier: 'cvc:Type:domain',
     version: '1',
     type: {
