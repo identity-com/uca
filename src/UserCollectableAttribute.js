@@ -13,7 +13,7 @@ const isAttestableValue = value => (value && value.attestableValue);
  * @param {*} identifier
  * @param {*} value
  */
-class UserColectableAttribute {
+class UserCollectableAttribute {
   constructor(identifier, value, version, customDefinitions) {
     this.id = null;
     this.identifier = null;
@@ -47,7 +47,7 @@ class UserColectableAttribute {
     } else if (isValueOfType(value, this.type)) {
       // Trying to construct UCA with a normal value
       this.timestamp = timestamp.now();
-      if (!UserColectableAttribute.isValid(value, this.type, definition)) {
+      if (!UserCollectableAttribute.isValid(value, this.type, definition)) {
         throw new Error(`${JSON.stringify(value)} is not valid for ${identifier}`);
       }
       this.value = value;
@@ -138,7 +138,7 @@ class UserColectableAttribute {
         _.forEach(typeDefProps, (prop) => {
           const typeSuffix = _.split(prop.type, ':')[2];
           const newBasePropName = prop.name === typeSuffix ? basePropName : `${basePropName}.${prop.name}`;
-          const proProperties = UserColectableAttribute.getAllProperties(prop.type, newBasePropName);
+          const proProperties = UserCollectableAttribute.getAllProperties(prop.type, newBasePropName);
           _.forEach(proProperties, p => properties.push(p));
         });
       }
@@ -190,17 +190,17 @@ function mixinIdentifiers(UCA) {
     const { identifier } = def;
 
     function UCAConstructor(value, version) {
-      const self = new UserColectableAttribute(identifier, value, version);
+      const self = new UserCollectableAttribute(identifier, value, version);
       return self;
     }
 
     source[name] = UCAConstructor;
-    _.mixin(UserColectableAttribute, source);
+    _.mixin(UserCollectableAttribute, source);
   });
   return UCA;
 }
 
-const UserColectableAttributeToExport = mixinIdentifiers(UserColectableAttribute);
-UserColectableAttributeToExport.resolveType = resolveType;
+const UserCollectableAttributeToExport = mixinIdentifiers(UserCollectableAttribute);
+UserCollectableAttributeToExport.resolveType = resolveType;
 
-module.exports = UserColectableAttributeToExport;
+module.exports = UserCollectableAttributeToExport;
