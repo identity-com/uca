@@ -129,6 +129,48 @@ describe('UCA Constructions tests', () => {
     expect(v.value.year.value).toBe(value.year);
   });
 
+  test('Creating date of birth with invalid day', () => {
+    const identifier = 'cvc:Identity:dateOfBirth';
+    const value = {
+      day: 32,
+      month: 2,
+      year: 1978,
+    };
+    function createUCA() {
+      return new UCA(identifier, value);
+    }
+
+    expect(createUCA).toThrowError('32 is not valid for cvc:Type:day');
+  });
+
+  test('Creating date of birth with invalid month', () => {
+    const identifier = 'cvc:Identity:dateOfBirth';
+    const value = {
+      day: 31,
+      month: 13,
+      year: 1978,
+    };
+    function createUCA() {
+      return new UCA(identifier, value);
+    }
+
+    expect(createUCA).toThrowError('13 is not valid for cvc:Type:month');
+  });
+
+  test('Creating date of birth with invalid year', () => {
+    const identifier = 'cvc:Identity:dateOfBirth';
+    const value = {
+      day: 31,
+      month: 12,
+      year: 1900,
+    };
+    function createUCA() {
+      return new UCA(identifier, value);
+    }
+
+    expect(createUCA).toThrowError('1900 is not valid for cvc:Type:year');
+  });
+
   test('Construct by NameGivenNames must result successfuly', () => {
     const v = new UCA.NameGivenNames('Joao');
     expect(v).toBeDefined();
