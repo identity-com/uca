@@ -7,6 +7,17 @@ const validIdentifiers = _.map(definitions, d => d.identifier);
 
 const isAttestableValue = value => (value && value.attestableValue);
 
+const handleNotFoundDefinition = (identifier, version) => {
+  if (version != null) {
+    const definition = _.find(definitions, { identifier });
+    if (definition) {
+      throw new Error(`Version ${version} is not supported for the identifier ${identifier}`);
+    }
+  }
+
+  throw new Error(`${identifier} is not defined`);
+};
+
 /**
  * Creates new UCA instances
  * @param {*} identifier
@@ -25,11 +36,10 @@ class UserColectableAttribute {
   }
 
   initialize(identifier, value, version) {
-    if (!_.includes(validIdentifiers, identifier)) {
-      throw new Error(`${identifier} is not defined`);
-    }
-
     const definition = version ? _.find(definitions, { identifier, version }) : _.find(definitions, { identifier });
+    if (!definition) {
+      return handleNotFoundDefinition(identifier, version);
+    }
 
     this.timestamp = null;
     this.id = null;
@@ -63,6 +73,7 @@ class UserColectableAttribute {
       this.value = ucaValue;
     }
     this.id = `${this.version}:${this.identifier}:${uuidv4()}`;
+    return this;
   }
 
   initializeAttestableValue() {
