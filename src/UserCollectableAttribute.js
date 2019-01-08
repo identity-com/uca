@@ -3,7 +3,7 @@ const timestamp = require('unix-timestamp');
 const uuidv4 = require('uuid/v4');
 const definitions = require('./definitions');
 const {
-  resolveType, isValueOfType, getTypeName, getValidIdentifiers,
+  resolveType, isValueOfType, getTypeName,
 } = require('./utils');
 
 const isAttestableValue = value => (value && value.attestableValue);
@@ -27,12 +27,12 @@ class UserCollectableAttribute {
   }
 
   initialize(identifier, value, version) {
-    if (!_.includes(getValidIdentifiers(this.definitions), identifier)) {
-      throw new Error(`${identifier} is not defined`);
-    }
-
     const definition = version
       ? _.find(this.definitions, { identifier, version }) : _.find(this.definitions, { identifier });
+
+    if (!definition) {
+      return this.handleNotFoundDefinition(identifier, version);
+    }
 
     this.timestamp = null;
     this.id = null;
@@ -66,6 +66,18 @@ class UserCollectableAttribute {
       this.value = ucaValue;
     }
     this.id = `${this.version}:${this.identifier}:${uuidv4()}`;
+    return this;
+  }
+
+  handleNotFoundDefinition(identifier, version) {
+    if (version != null) {
+      const definition = _.find(this.definitions, { identifier });
+      if (definition) {
+        throw new Error(`Version ${version} is not supported for the identifier ${identifier}`);
+      }
+    }
+
+    throw new Error(`${identifier} is not defined`);
   }
 
   initializeAttestableValue() {

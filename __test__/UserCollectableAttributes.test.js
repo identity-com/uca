@@ -2,7 +2,7 @@ const UCA = require('../src/UserCollectableAttribute');
 const ucaIndex = require('../src');
 
 describe('UCA Constructions tests', () => {
-  test('UCA construction should fails', () => {
+  test('UCA construction for wrong identifier should fails', () => {
     function createUCA() {
       return new UCA('name.first', 'joao');
     }
@@ -299,5 +299,22 @@ describe('UCA Constructions tests', () => {
         `UserCollectableAttribute must not receive attestable value: ${JSON.stringify(attestableValue)}`,
       );
     }
+  });
+
+  test('Must throw error when it does not find UCA by its identifier and version', () => {
+    const identifier = 'cvc:Contact:phoneNumber';
+    const badVersion = '1123414';
+
+    function createUCA() {
+      return new UCA(identifier, {
+        country: 'DE',
+        countryCode: '49',
+        number: '17225252255',
+        lineType: 'mobile',
+        extension: '111',
+      }, badVersion);
+    }
+
+    expect(createUCA).toThrowError(`Version ${badVersion} is not supported for the identifier ${identifier}`);
   });
 });
