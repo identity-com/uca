@@ -627,7 +627,7 @@ const definitions = [
   },
 
   {
-    identifier: 'cvc:socialSecurity:number',
+    identifier: 'cvc:SocialSecurity:number',
     version: '1',
     type: 'cvc:Type:socialSecurityNumber',
     credentialItem: true,
@@ -640,15 +640,15 @@ const definitions = [
       properties: [
         {
           name: 'areaNumber',
-          type: 'cvc:socialSecurity:areaNumber',
+          type: 'cvc:SocialSecurity:areaNumber',
         },
         {
           name: 'groupNumber',
-          type: 'cvc:socialSecurity:groupNumber',
+          type: 'cvc:SocialSecurity:groupNumber',
         },
         {
           name: 'serialNumber',
-          type: 'cvc:socialSecurity:serialNumber',
+          type: 'cvc:SocialSecurity:serialNumber',
         },
       ],
       required: ['areaNumber', 'groupNumber', 'serialNumber'],
@@ -656,19 +656,19 @@ const definitions = [
     credentialItem: false,
   },
   {
-    identifier: 'cvc:socialSecurity:areaNumber',
+    identifier: 'cvc:SocialSecurity:areaNumber',
     version: '1',
     type: 'String',
     pattern: /^\d{3}$/,
   },
   {
-    identifier: 'cvc:socialSecurity:groupNumber',
+    identifier: 'cvc:SocialSecurity:groupNumber',
     version: '1',
     type: 'String',
     pattern: /^\d{2}$/,
   },
   {
-    identifier: 'cvc:socialSecurity:serialNumber', // four last digits of SSN
+    identifier: 'cvc:SocialSecurity:serialNumber', // four last digits of SSN
     version: '1',
     type: 'String',
     pattern: /^\d{4}$/,
