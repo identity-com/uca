@@ -93,15 +93,9 @@ const definitions = [
     credentialItem: false,
   },
   {
-    identifier: 'cvc:Email:properties',
-    version: '1',
-    type: 'cvc:Type:email',
-    credentialItem: true,
-  },
-  {
     identifier: 'cvc:Contact:email',
     version: '1',
-    type: 'cvc:Email:properties',
+    type: 'cvc:Type:email',
     credentialItem: true,
   },
   {
@@ -529,7 +523,7 @@ const definitions = [
       properties: [
         {
           name: 'type',
-          type: 'cvc:Document:type',
+          type: 'cvc:Type:documentType',
         },
         {
           name: 'face',
@@ -590,9 +584,14 @@ const definitions = [
     },
   },
   {
-    identifier: 'cvc:Document:type',
+    identifier: 'cvc:Type:documentType',
     version: '1',
     type: 'String',
+  },
+  {
+    identifier: 'cvc:Document:type',
+    version: '1',
+    type: 'cvc:Type:documentType',
     credentialItem: true,
   },
   {
