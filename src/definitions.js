@@ -625,6 +625,13 @@ const definitions = [
     type: 'String',
     credentialItem: true,
   },
+
+  {
+    identifier: 'cvc:socialSecurity:number',
+    version: '1',
+    type: 'cvc:Type:socialSecurityNumber',
+    credentialItem: true,
+  },
   // Structure of socialSecurityNumber is described here: https://www.ssa.gov/history/ssn/geocard.html
   {
     identifier: 'cvc:Type:socialSecurityNumber',
@@ -661,16 +668,10 @@ const definitions = [
     pattern: /^\d{2}$/,
   },
   {
-    identifier: 'cvc:socialSecurity:serialNumber',
+    identifier: 'cvc:socialSecurity:serialNumber', // four last digits of SSN
     version: '1',
     type: 'String',
     pattern: /^\d{4}$/,
-    credentialItem: true,
-  },
-  {
-    identifier: 'cvc:socialSecurity:number',
-    version: '1',
-    type: 'cvc:Type:socialSecurityNumber',
     credentialItem: true,
   },
 ];
