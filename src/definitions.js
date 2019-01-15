@@ -625,18 +625,52 @@ const definitions = [
     type: 'String',
     credentialItem: true,
   },
+  // Structure of socialSecurityNumber is described here: https://www.ssa.gov/history/ssn/geocard.html
   {
-    identifier: 'cvc:SSN:number',
+    identifier: 'cvc:Type:socialSecurityNumber',
     version: '1',
-    type: 'String',
-    pattern: /^\d{9}$/,
-    credentialItem: true,
+    type: {
+      properties: [
+        {
+          name: 'areaNumber',
+          type: 'cvc:socialSecurity:areaNumber',
+        },
+        {
+          name: 'groupNumber',
+          type: 'cvc:socialSecurity:groupNumber',
+        },
+        {
+          name: 'serialNumber',
+          type: 'cvc:socialSecurity:serialNumber',
+        },
+      ],
+      required: ['areaNumber', 'groupNumber', 'serialNumber'],
+    },
+    credentialItem: false,
   },
   {
-    identifier: 'cvc:SSN:serialNumber',
+    identifier: 'cvc:socialSecurity:areaNumber',
+    version: '1',
+    type: 'String',
+    pattern: /^\d{3}$/,
+  },
+  {
+    identifier: 'cvc:socialSecurity:groupNumber',
+    version: '1',
+    type: 'String',
+    pattern: /^\d{2}$/,
+  },
+  {
+    identifier: 'cvc:socialSecurity:serialNumber',
     version: '1',
     type: 'String',
     pattern: /^\d{4}$/,
+    credentialItem: true,
+  },
+  {
+    identifier: 'cvc:socialSecurity:number',
+    version: '1',
+    type: 'cvc:Type:socialSecurityNumber',
     credentialItem: true,
   },
 ];

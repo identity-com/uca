@@ -318,44 +318,62 @@ describe('UCA Constructions tests', () => {
     expect(createUCA).toThrowError(`Version ${badVersion} is not supported for the identifier ${identifier}`);
   });
 
-  test('Construct cvc:SSN:number successfully', () => {
-    const identifier = 'cvc:SSN:number';
-    const ssn = new UCA(identifier, '123456789');
+  test('Construct cvc:socialSecurity:serialNumber successfully', () => {
+    const identifier = 'cvc:socialSecurity:number';
+    const ssn = new UCA(identifier, {
+      areaNumber: '123',
+      groupNumber: '45',
+      serialNumber: '6789',
+    });
 
     const plain = ssn.getPlainValue();
-    expect(plain).toBe('123456789');
+    expect(plain.areaNumber).toBe('123');
+    expect(plain.groupNumber).toBe('45');
+    expect(plain.serialNumber).toBe('6789');
   });
 
-  test('Must throw error for invalid SSN', () => {
-    const identifier = 'cvc:SSN:number';
+  test('Must throw error for invalid cvc:socialSecurity:number', () => {
+    const identifier = 'cvc:socialSecurity:number';
 
     function createUCA(id, value) {
       return new UCA(id, value);
     }
 
-    expect(createUCA.bind(this, identifier, '12345678'))
-      .toThrowError(`${JSON.stringify('12345678')} is not valid for ${identifier}`);
+    expect(createUCA.bind(this, identifier, {
+      areaNumber: '1234',
+      groupNumber: '45',
+      serialNumber: '6789',
+    }))
+      .toThrowError('"1234" is not valid for cvc:socialSecurity:areaNumber');
 
-    expect(createUCA.bind(this, identifier, 'abc123456'))
-      .toThrowError(`${JSON.stringify('abc123456')} is not valid for ${identifier}`);
+    expect(createUCA.bind(this, identifier, {
+      areaNumber: '123',
+      groupNumber: '456',
+      serialNumber: '6789',
+    }))
+      .toThrowError('"456" is not valid for cvc:socialSecurity:groupNumber');
 
-    expect(createUCA.bind(this, identifier, 'abcdefghi'))
-      .toThrowError(`${JSON.stringify('abcdefghi')} is not valid for ${identifier}`);
+    expect(createUCA.bind(this, identifier, {
+      areaNumber: '123',
+      groupNumber: '45',
+      serialNumber: '67890',
+    }))
+      .toThrowError('"67890" is not valid for cvc:socialSecurity:serialNumber');
 
     expect(createUCA.bind(this, identifier, 'abcde'))
-      .toThrowError(`${JSON.stringify('abcde')} is not valid for ${identifier}`);
+      .toThrowError('Missing required fields to cvc:socialSecurity:number');
   });
 
-  test('Construct cvc:SSN:serialNumber', () => {
-    const identifier = 'cvc:SSN:serialNumber';
+  test('Construct cvc:socialSecurity:serialNumber', () => {
+    const identifier = 'cvc:socialSecurity:serialNumber';
     const ssn = new UCA(identifier, '1234');
 
     const plain = ssn.getPlainValue();
     expect(plain).toBe('1234');
   });
 
-  test('Must throw error for invalid cvc:SSN:serialNumber', () => {
-    const identifier = 'cvc:SSN:serialNumber';
+  test('Must throw error for invalid cvc:socialSecurity:serialNumber', () => {
+    const identifier = 'cvc:socialSecurity:serialNumber';
 
     function createUCA(id, value) {
       return new UCA(id, value);
