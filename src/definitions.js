@@ -624,6 +624,55 @@ const definitions = [
     type: 'String',
     credentialItem: true,
   },
+
+  {
+    identifier: 'cvc:SocialSecurity:number',
+    version: '1',
+    type: 'cvc:Type:socialSecurityNumber',
+    credentialItem: true,
+  },
+  // Structure of socialSecurityNumber is described here: https://www.ssa.gov/history/ssn/geocard.html
+  {
+    identifier: 'cvc:Type:socialSecurityNumber',
+    version: '1',
+    type: {
+      properties: [
+        {
+          name: 'areaNumber',
+          type: 'cvc:SocialSecurity:areaNumber',
+        },
+        {
+          name: 'groupNumber',
+          type: 'cvc:SocialSecurity:groupNumber',
+        },
+        {
+          name: 'serialNumber',
+          type: 'cvc:SocialSecurity:serialNumber',
+        },
+      ],
+      required: ['areaNumber', 'groupNumber', 'serialNumber'],
+    },
+    credentialItem: false,
+  },
+  {
+    identifier: 'cvc:SocialSecurity:areaNumber',
+    version: '1',
+    type: 'String',
+    pattern: /^\d{3}$/,
+  },
+  {
+    identifier: 'cvc:SocialSecurity:groupNumber',
+    version: '1',
+    type: 'String',
+    pattern: /^\d{2}$/,
+  },
+  {
+    identifier: 'cvc:SocialSecurity:serialNumber', // four last digits of SSN
+    version: '1',
+    type: 'String',
+    pattern: /^\d{4}$/,
+    credentialItem: true,
+  },
 ];
 
 module.exports = definitions;
