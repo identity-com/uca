@@ -177,7 +177,7 @@ describe('UCA Constructions tests', () => {
     expect(v.value).toBe('Joao');
   });
 
-  test('Construct IdentityName must result successfuly', () => {
+  test('Construct IdentityName must result successfully', () => {
     const value = { givenNames: 'Joao', otherNames: 'Barbosa', familyNames: 'Santos' };
     const v = new UCA.IdentityName(value);
     expect(v).toBeDefined();
@@ -316,5 +316,64 @@ describe('UCA Constructions tests', () => {
     }
 
     expect(createUCA).toThrowError(`Version ${badVersion} is not supported for the identifier ${identifier}`);
+  });
+
+  test('Construct cvc:SSN:number successfully', () => {
+    const identifier = 'cvc:SSN:number';
+    const ssn = new UCA(identifier, '123456789');
+
+    const plain = ssn.getPlainValue();
+    expect(plain).toBe('123456789');
+  });
+
+  test('Must throw error for invalid SSN', () => {
+    const identifier = 'cvc:SSN:number';
+
+    function createUCA(id, value) {
+      return new UCA(id, value);
+    }
+
+    expect(createUCA.bind(this, identifier, '12345678'))
+      .toThrowError(`${JSON.stringify('12345678')} is not valid for ${identifier}`);
+
+    expect(createUCA.bind(this, identifier, 'abc123456'))
+      .toThrowError(`${JSON.stringify('abc123456')} is not valid for ${identifier}`);
+
+    expect(createUCA.bind(this, identifier, 'abcdefghi'))
+      .toThrowError(`${JSON.stringify('abcdefghi')} is not valid for ${identifier}`);
+
+    expect(createUCA.bind(this, identifier, 'abcde'))
+      .toThrowError(`${JSON.stringify('abcde')} is not valid for ${identifier}`);
+  });
+
+  test('Construct cvc:SSN:serialNumber', () => {
+    const identifier = 'cvc:SSN:serialNumber';
+    const ssn = new UCA(identifier, '1234');
+
+    const plain = ssn.getPlainValue();
+    expect(plain).toBe('1234');
+  });
+
+  test('Must throw error for invalid cvc:SSN:serialNumber', () => {
+    const identifier = 'cvc:SSN:serialNumber';
+
+    function createUCA(id, value) {
+      return new UCA(id, value);
+    }
+
+    expect(createUCA.bind(this, identifier, '123'))
+      .toThrowError(`${JSON.stringify('123')} is not valid for ${identifier}`);
+
+    expect(createUCA.bind(this, identifier, '12345'))
+      .toThrowError(`${JSON.stringify('12345')} is not valid for ${identifier}`);
+
+    expect(createUCA.bind(this, identifier, 'abc'))
+      .toThrowError(`${JSON.stringify('abc')} is not valid for ${identifier}`);
+
+    expect(createUCA.bind(this, identifier, 'abcd'))
+      .toThrowError(`${JSON.stringify('abcd')} is not valid for ${identifier}`);
+
+    expect(createUCA.bind(this, identifier, 'abcde'))
+      .toThrowError(`${JSON.stringify('abcde')} is not valid for ${identifier}`);
   });
 });

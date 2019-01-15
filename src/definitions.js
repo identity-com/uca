@@ -625,6 +625,20 @@ const definitions = [
     type: 'String',
     credentialItem: true,
   },
+  {
+    identifier: 'cvc:SSN:number',
+    version: '1',
+    type: 'String',
+    pattern: /^\d{9}$/,
+    credentialItem: true,
+  },
+  {
+    identifier: 'cvc:SSN:serialNumber',
+    version: '1',
+    type: 'String',
+    pattern: /^\d{4}$/,
+    credentialItem: true,
+  },
 ];
 
 module.exports = definitions;
