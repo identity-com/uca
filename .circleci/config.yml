@@ -112,8 +112,8 @@ jobs:
           command: npm run tag
 
       - run:
-        name: delete-release-tag
-        command: git push --delete origin $CIRCLE_TAG
+          name: delete-release-tag
+          command: git push --delete origin $CIRCLE_TAG
   deploy:
     <<: *defaults  
     steps:
