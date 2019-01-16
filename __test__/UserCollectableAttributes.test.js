@@ -367,7 +367,6 @@ describe('UCA Constructions tests', () => {
   test('Construct cvc:SocialSecurity:serialNumber', () => {
     const identifier = 'cvc:SocialSecurity:serialNumber';
     const ssn = new UCA(identifier, '1234');
-
     const plain = ssn.getPlainValue();
     expect(plain).toBe('1234');
   });
@@ -393,5 +392,13 @@ describe('UCA Constructions tests', () => {
 
     expect(createUCA.bind(this, identifier, 'abcde'))
       .toThrowError(`${JSON.stringify('abcde')} is not valid for ${identifier}`);
+  });
+
+  test('Check credentialItem attribute', () => {
+    const uca = new UCA('cvc:Name:givenNames', 'Yan');
+    expect(uca.credentialItem).toBeTruthy();
+
+    const uca2 = new UCA('cvc:Meta:expirationDate', '-1');
+    expect(uca2.credentialItem).toBeFalsy();
   });
 });

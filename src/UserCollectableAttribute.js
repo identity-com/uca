@@ -21,6 +21,7 @@ class UserCollectableAttribute {
     this.version = null;
     this.type = null;
     this.value = null;
+    this.credentialItem = null;
     this.definitions = customDefinitions || definitions;
 
     this.initialize(identifier, value, version);
@@ -65,6 +66,8 @@ class UserCollectableAttribute {
       }), 'key'), 'value');
       this.value = ucaValue;
     }
+
+    this.credentialItem = definition.credentialItem;
     this.id = `${this.version}:${this.identifier}:${uuidv4()}`;
     return this;
   }
@@ -94,10 +97,7 @@ class UserCollectableAttribute {
         if (propName) {
           newParent[propName] = this.value;
         } else {
-          if (!this.credentialItem) {
-            return this.value;
-          }
-          newParent[this.identifier] = this.value;
+          return this.value;
         }
         return newParent;
       default:
