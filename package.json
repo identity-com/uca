@@ -1,6 +1,6 @@
 {
   "name": "@identity.com/uca",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Provides functionality around User Collectable Attributes (UCA)",
   "main": "src/index.js",
   "module": "dist/es/index.js",
