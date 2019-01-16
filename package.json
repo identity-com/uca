@@ -19,7 +19,8 @@
     "build": "npm run build:browser && npm run build:cjs && npm run build:es",
     "tag": "git tag v$npm_package_version && git push --tags origin master",
     "pretag": "git fetch --tags",
-    "precommit": "npm run lint"
+    "precommit": "npm run lint",
+    "release:create": "hub release create -m v$npm_package_version v$npm_package_version"
   },
   "author": "Identity.com Community",
   "license": "MIT",
