@@ -19,7 +19,7 @@ workflows:
               only: /^v\d+\.\d+\.\d+-release.*$/
             branches:
               ignore: /.*/
-      - release_rc:
+      - release:
           context: Production
           requires:
             - build
@@ -75,8 +75,11 @@ jobs:
           root: ~/repo
           paths: .
 
-  release_rc:
+  release:
     <<: *defaults
+    environment:
+      HUB_ARTIFACT_VERSION: 2.5.1
+      HUB_ARTIFACT: hub-linux-amd64-2.5.1
     steps:
       - checkout
 
@@ -114,8 +117,16 @@ jobs:
       - run:
           name: delete-release-tag
           command: git push --delete origin $CIRCLE_TAG
+
+      - run: |
+          sh ./.circleci/install_hub.sh
+          mkdir ~/.config/ && echo -e "github.com:\n- user: civictechuser\n  oauth_token: $GITHUB_API_KEY\n  protocol: https\n" > ~/.config/hub
+      
+      - run: |
+          hub release delete $CIRCLE_TAG
+
   deploy:
-    <<: *defaults  
+    <<: *defaults
     steps:
       - attach_workspace:
           at: ~/repo
