@@ -66,14 +66,21 @@ const getObjectBasePropName = (definitions, typeDefinition, pathName) => {
   return undefined;
 };
 
+const flagRequeredProps = (requiredArray, props) => (
+  _.map(props, p => _.merge(p, { required: _.includes(requiredArray, p.name) }))
+);
+
 const getObjectTypeDefProps = (definitions, typeDefinition) => {
   if (typeDefinition && getTypeName(typeDefinition, definitions) === 'Object') {
     let typeDefProps;
     if (typeDefinition.type.properties) {
       typeDefProps = typeDefinition.type.properties;
+      typeDefProps = flagRequeredProps(typeDefinition.type.required, typeDefProps);
     } else {
       const typeDefDefinition = _.find(definitions, { identifier: typeDefinition.type });
-      typeDefProps = resolveType(typeDefDefinition, definitions).properties;
+      const resolvedType = resolveType(typeDefDefinition, definitions);
+      typeDefProps = resolvedType.properties;
+      typeDefProps = flagRequeredProps(resolvedType.required, typeDefProps);
     }
     return typeDefProps;
   }

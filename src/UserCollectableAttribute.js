@@ -8,6 +8,62 @@ const {
 
 const isAttestableValue = value => (value && value.attestableValue);
 
+const handleNotFoundDefinition = (myDefinitions, identifier, version) => {
+  if (version != null) {
+    const definition = _.find(myDefinitions, { identifier });
+    if (definition) {
+      throw new Error(`Version ${version} is not supported for the identifier ${identifier}`);
+    }
+  }
+
+  throw new Error(`${identifier} is not defined`);
+};
+
+class UCATemplateValue {
+  constructor(name, value, type, identifier, required, version) {
+    this.name = name;
+    this.value = value;
+    this.meta = {
+      required,
+      identifier,
+      type,
+      version,
+    };
+  }
+}
+
+const getUCATemplateProperties = (identifier, required, version, pathName) => {
+  const definition = version ? _.find(definitions, { identifier, version }) : _.find(definitions, { identifier });
+  if (!definition) {
+    return handleNotFoundDefinition(definitions, identifier, version);
+  }
+  const typeDefinition = getTypeDefinition(definitions, identifier);
+
+  const properties = [];
+
+  if (typeDefinition && getTypeName(typeDefinition, definitions) === 'Object') {
+    const typeDefProps = getObjectTypeDefProps(definitions, typeDefinition);
+    const basePropName = getObjectBasePropName(definitions, typeDefinition, pathName);
+
+    _.forEach(typeDefProps, (prop) => {
+      const typeSuffix = _.split(prop.type, ':')[2];
+      const newBasePropName = prop.name === typeSuffix ? basePropName : `${basePropName}.${prop.name}`;
+      const proProperties = getUCATemplateProperties(prop.type, prop.required, version, newBasePropName);
+      _.forEach(proProperties, (p) => { properties.push(p); });
+    });
+  } else if (pathName) {
+    const name = `${pathName}.${_.split(definition.identifier, ':')[2]}`;
+    const p = new UCATemplateValue(name, null, definition.type, definition.identifier, required, version);
+    properties.push(JSON.parse(JSON.stringify(p)));
+  } else {
+    const identifierComponents = _.split(identifier, ':');
+    const name = `${_.lowerCase(identifierComponents[1])}.${identifierComponents[2]}`;
+    const p = new UCATemplateValue(name, null, definition.type, definition.identifier, required, version);
+    properties.push(JSON.parse(JSON.stringify(p)));
+  }
+  return properties;
+};
+
 /**
  * Creates new UCA instances
  * @param {*} identifier
@@ -32,7 +88,7 @@ class UserCollectableAttribute {
       ? _.find(this.definitions, { identifier, version }) : _.find(this.definitions, { identifier });
 
     if (!definition) {
-      return this.handleNotFoundDefinition(identifier, version);
+      return handleNotFoundDefinition(this.definitions, identifier, version);
     }
 
     this.timestamp = null;
@@ -70,17 +126,6 @@ class UserCollectableAttribute {
     this.credentialItem = definition.credentialItem;
     this.id = `${this.version}:${this.identifier}:${uuidv4()}`;
     return this;
-  }
-
-  handleNotFoundDefinition(identifier, version) {
-    if (version != null) {
-      const definition = _.find(this.definitions, { identifier });
-      if (definition) {
-        throw new Error(`Version ${version} is not supported for the identifier ${identifier}`);
-      }
-    }
-
-    throw new Error(`${identifier} is not defined`);
   }
 
   initializeAttestableValue() {
@@ -148,8 +193,34 @@ class UserCollectableAttribute {
   }
 
   static getTemplateFor(identifier, version) {
-    const t = { identifier, version };
-    return t;
+    const definition = version ? _.find(definitions, { identifier, version }) : _.find(definitions, { identifier });
+    if (!definition) {
+      return handleNotFoundDefinition(identifier, version);
+    }
+
+    const ucaTemplate = {
+      identifier,
+      version: definition.version,
+      basePropertyName: '',
+      properties: [],
+    };
+
+    const typeDefinition = getTypeDefinition(definitions, identifier);
+
+    // If Object
+    if (typeDefinition && getTypeName(typeDefinition, definitions) === 'Object') {
+      const basePropertyName = getObjectBasePropName(definitions, typeDefinition);
+      ucaTemplate.basePropertyName = basePropertyName;
+    } else {
+      const identifierComponents = _.split(identifier, ':');
+      const basePropertyName = `${_.lowerCase(identifierComponents[1])}.${identifierComponents[2]}`;
+      ucaTemplate.basePropertyName = basePropertyName;
+    }
+
+    const isSimplePropertiesRequired = true;
+    ucaTemplate.properties = getUCATemplateProperties(identifier, isSimplePropertiesRequired, version);
+
+    return ucaTemplate;
   }
 
   static isValid(value, type, definition) {

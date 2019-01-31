@@ -414,4 +414,67 @@ describe('UCA Constructions tests', () => {
     const isValid = UCA.isValid(1, 'foo');
     expect(isValid).toBeFalsy();
   });
+
+  test('Get template for complex uca', () => {
+    const ucaTemplate = UCA.getTemplateFor('cvc:Contact:email', '1');
+    // console.log(JSON.stringify(ucaTemplate, null, 2));
+    expect(ucaTemplate).toBeDefined();
+    expect(ucaTemplate.identifier).toEqual('cvc:Contact:email');
+    expect(ucaTemplate.version).toEqual('1');
+    expect(ucaTemplate.basePropertyName).toEqual('contact.email');
+    expect(ucaTemplate.properties.length).toEqual(3);
+    expect(ucaTemplate.properties[0].name).toEqual('contact.email.username');
+    expect(ucaTemplate.properties[0].value).toEqual(null);
+    expect(ucaTemplate.properties[0].meta.required).toEqual(false);
+    expect(ucaTemplate.properties[0].meta.identifier).toEqual('cvc:Email:username');
+    expect(ucaTemplate.properties[0].meta.type).toEqual('String');
+    expect(ucaTemplate.properties[0].meta.version).toEqual('1');
+  });
+
+  test('Get template for complex uca 2', () => {
+    const ucaTemplate = UCA.getTemplateFor('cvc:Identity:dateOfBirth', '1');
+    // console.log(JSON.stringify(ucaTemplate, null, 2));
+    expect(ucaTemplate).toBeDefined();
+    expect(ucaTemplate.identifier).toEqual('cvc:Identity:dateOfBirth');
+    expect(ucaTemplate.version).toEqual('1');
+    expect(ucaTemplate.basePropertyName).toEqual('identity.dateOfBirth');
+    expect(ucaTemplate.properties.length).toEqual(3);
+    expect(ucaTemplate.properties[0].name).toEqual('identity.dateOfBirth.day');
+    expect(ucaTemplate.properties[0].value).toEqual(null);
+    expect(ucaTemplate.properties[0].meta.required).toEqual(true);
+    expect(ucaTemplate.properties[0].meta.identifier).toEqual('cvc:Type:day');
+    expect(ucaTemplate.properties[0].meta.type).toEqual('Number');
+    expect(ucaTemplate.properties[0].meta.version).toEqual('1');
+  });
+
+
+  test('Get template for complex uca 3', () => {
+    const ucaTemplate = UCA.getTemplateFor('cvc:Identity:address', '1');
+    // console.log(JSON.stringify(ucaTemplate, null, 2));
+    expect(ucaTemplate).toBeDefined();
+    expect(ucaTemplate.identifier).toEqual('cvc:Identity:address');
+    expect(ucaTemplate.version).toEqual('1');
+    expect(ucaTemplate.basePropertyName).toEqual('identity.address');
+    expect(ucaTemplate.properties.length).toEqual(7);
+  });
+
+  test('Get template for simple uca', () => {
+    const ucaTemplate = UCA.getTemplateFor('cvc:Verify:phoneNumberToken', '1');
+    // console.log(JSON.stringify(ucaTemplate, null, 2));
+    expect(ucaTemplate).toBeDefined();
+    expect(ucaTemplate.identifier).toEqual('cvc:Verify:phoneNumberToken');
+    expect(ucaTemplate.version).toEqual('1');
+    expect(ucaTemplate.basePropertyName).toEqual('verify.phoneNumberToken');
+    expect(ucaTemplate.properties.length).toEqual(1);
+  });
+
+  test('Construct UCA from PropertyValuePair', () => {
+    const ucaTemplate = UCA.getTemplateFor('cvc:Verify:phoneNumberToken', '1');
+    // console.log(JSON.stringify(ucaTemplate, null, 2));
+    expect(ucaTemplate).toBeDefined();
+    expect(ucaTemplate.identifier).toEqual('cvc:Verify:phoneNumberToken');
+    expect(ucaTemplate.version).toEqual('1');
+    expect(ucaTemplate.basePropertyName).toEqual('verify.phoneNumberToken');
+    expect(ucaTemplate.properties.length).toEqual(1);
+  });
 });
