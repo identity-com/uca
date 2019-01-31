@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const timestamp = require('unix-timestamp');
 const uuidv4 = require('uuid/v4');
+const flatten = require('flat');
 const definitions = require('./definitions');
 const {
   resolveType, isValueOfType, getTypeName, getTypeDefinition, getObjectBasePropName, getObjectTypeDefProps,
@@ -221,6 +222,21 @@ class UserCollectableAttribute {
     ucaTemplate.properties = getUCATemplateProperties(identifier, isSimplePropertiesRequired, version);
 
     return ucaTemplate;
+  }
+
+  static getValueFromProps(identifier, props, ucaVersion) {
+    const ucaProps = UserCollectableAttribute.getTemplateFor(identifier, ucaVersion);
+
+    const flattenProps = {};
+    _.each(ucaProps.properties, (p) => {
+      const fProp = _.find(props, { name: p.name });
+      flattenProps[fProp.name] = fProp.value;
+    });
+
+    const value = flatten.unflatten(flattenProps);
+    const stripedValue = _.get(value, ucaProps.basePropertyName);
+
+    return stripedValue;
   }
 
   static isValid(value, type, definition) {

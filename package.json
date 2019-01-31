@@ -25,6 +25,7 @@
   "author": "Identity.com Community",
   "license": "MIT",
   "dependencies": {
+    "flat": "^4.1.0",
     "lodash": "^4.17.11",
     "unix-timestamp": "^0.2.0",
     "uuid": "^3.3.2",
