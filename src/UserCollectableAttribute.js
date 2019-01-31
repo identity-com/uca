@@ -3,7 +3,7 @@ const timestamp = require('unix-timestamp');
 const uuidv4 = require('uuid/v4');
 const definitions = require('./definitions');
 const {
-  resolveType, isValueOfType, getTypeName,
+  resolveType, isValueOfType, getTypeName, getTypeDefinition, getObjectBasePropName, getObjectTypeDefProps,
 } = require('./utils');
 
 const isAttestableValue = value => (value && value.attestableValue);
@@ -119,29 +119,11 @@ class UserCollectableAttribute {
   static getAllProperties(identifier, pathName) {
     const definition = _.find(definitions, { identifier });
     const properties = [];
-    const type = resolveType(definition, definitions);
-    const typeDefinition = _.isString(type) ? _.find(definitions, { identifier: type }) : definition;
+    const typeDefinition = getTypeDefinition(definitions, identifier);
 
     if (typeDefinition && getTypeName(typeDefinition, definitions) === 'Object') {
-      let typeDefProps;
-      if (typeDefinition.type.properties) {
-        typeDefProps = typeDefinition.type.properties;
-      } else {
-        const typeDefDefinition = _.find(definitions, { identifier: typeDefinition.type });
-        typeDefProps = resolveType(typeDefDefinition, definitions).properties;
-      }
-
-      let basePropName;
-      const baseIdentifierComponents = _.split(typeDefinition.identifier, ':');
-      if (pathName) {
-        if (_.includes(pathName, _.lowerCase(baseIdentifierComponents[1]))) {
-          basePropName = `${pathName}.${baseIdentifierComponents[2]}`;
-        } else {
-          basePropName = `${pathName}.${_.lowerCase(baseIdentifierComponents[1])}.${baseIdentifierComponents[2]}`;
-        }
-      } else {
-        basePropName = `${_.lowerCase(baseIdentifierComponents[1])}.${baseIdentifierComponents[2]}`;
-      }
+      const typeDefProps = getObjectTypeDefProps(definitions, typeDefinition);
+      const basePropName = getObjectBasePropName(definitions, typeDefinition, pathName);
 
       if (_.includes(['String', 'Number', 'Boolean'], `${typeDefProps.type}`)) {
         // Properties is not an object
@@ -165,6 +147,10 @@ class UserCollectableAttribute {
     return properties;
   }
 
+  static getTemplateFor(identifier, version) {
+    const t = { identifier, version };
+    return t;
+  }
 
   static isValid(value, type, definition) {
     switch (type) {

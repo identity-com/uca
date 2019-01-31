@@ -272,6 +272,14 @@ describe('UCA Constructions tests', () => {
     expect(properties).toContain('identity.name.otherNames');
   });
 
+  test('Should get ALL UCA properties name', () => {
+    const properties = UCA.getAllProperties('cvc:Identity:name');
+    expect(properties).toHaveLength(3);
+    expect(properties).toContain('identity.name.givenNames');
+    expect(properties).toContain('identity.name.familyNames');
+    expect(properties).toContain('identity.name.otherNames');
+  });
+
   test('Index initialization', () => {
     expect(ucaIndex).toBeDefined();
     expect(ucaIndex.definitions).toBeDefined();
@@ -400,5 +408,10 @@ describe('UCA Constructions tests', () => {
 
     const uca2 = new UCA('cvc:Meta:expirationDate', '-1');
     expect(uca2.credentialItem).toBeFalsy();
+  });
+
+  test('Check isValid with invalid one', () => {
+    const isValid = UCA.isValid(1, 'foo');
+    expect(isValid).toBeFalsy();
   });
 });
