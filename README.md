@@ -268,6 +268,79 @@ JSON String
 
 ```
 
+##### Getting UCA properties template and generation values
+
+```js
+const ucaTemplate = UCA.getUCAProps('cvc:Contact:email', '1');
+  //  ucaTemplate = {
+  //     "identifier": "cvc:Contact:email",
+  //     "version": "1",
+  //     "basePropertyName": "contact.email",
+  //     "properties": [
+  //       {
+  //         "name": "contact.email.username",
+  //         "value": null,
+  //         "meta": {
+  //           "required": false,
+  //           "identifier": "cvc:Email:username",
+  //           "type": "String",
+  //           "version": "1"
+  //         }
+  //       },
+  //       {
+  //         "name": "contact.email.domain.tld",
+  //         "value": null,
+  //         "meta": {
+  //           "required": true,
+  //           "identifier": "cvc:Domain:tld",
+  //           "type": "String",
+  //           "version": "1"
+  //         }
+  //       },
+  //       {
+  //         "name": "contact.email.domain.name",
+  //         "value": null,
+  //         "meta": {
+  //           "required": true,
+  //           "identifier": "cvc:Domain:name",
+  //           "type": "String",
+  //           "version": "1"
+  //         }
+  //       }
+  //     ]
+  //   }
+```
+
+So you can use the above `properties` array as a template for defining new UCA values. Given an array of properties and values, you can get a ucaValue ready for use on a new UCA:
+
+```js
+const propValues = [
+  {
+    name: 'contact.email.username',
+    value: 'savio',
+  },
+  {
+    name: 'contact.email.domain.name',
+    value: 'civic',
+  },
+  {
+    name: 'contact.email.domain.tld',
+    value: 'com',
+  },
+];
+
+const ucaValue = UCA.parseValueFromProps('cvc:Contact:email', propValues, '1');
+// ucaValue = {
+//   "username": "savio",
+//   "domain": {
+//     "name": "civic",
+//     "tld": "com",
+//   }
+// }
+const uca = new UCA('cvc:Contact:email', ucaValue, '1');
+
+```
+
 ## Schema Generator
 
 The json schema generator will get a previous definition and build a sample JSON (with random values).
