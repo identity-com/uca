@@ -416,7 +416,7 @@ describe('UCA Constructions tests', () => {
   });
 
   test('Get template for complex uca', () => {
-    const ucaTemplate = UCA.getTemplateFor('cvc:Contact:email', '1');
+    const ucaTemplate = UCA.getUCAProps('cvc:Contact:email', '1');
     expect(ucaTemplate).toBeDefined();
     expect(ucaTemplate.identifier).toEqual('cvc:Contact:email');
     expect(ucaTemplate.version).toEqual('1');
@@ -450,7 +450,7 @@ describe('UCA Constructions tests', () => {
       },
     ];
 
-    const ucaValue = UCA.getValueFromProps('cvc:Contact:email', propValues, '1');
+    const ucaValue = UCA.parseValueFromProps('cvc:Contact:email', propValues, '1');
     expect(ucaValue.username).toEqual('savio');
     expect(ucaValue.domain.name).toEqual('civic');
     expect(ucaValue.domain.tld).toEqual('com');
@@ -461,7 +461,7 @@ describe('UCA Constructions tests', () => {
   });
 
   test('Get template for complex uca 2', () => {
-    const ucaTemplate = UCA.getTemplateFor('cvc:Identity:dateOfBirth', '1');
+    const ucaTemplate = UCA.getUCAProps('cvc:Identity:dateOfBirth', '1');
     expect(ucaTemplate).toBeDefined();
     expect(ucaTemplate.identifier).toEqual('cvc:Identity:dateOfBirth');
     expect(ucaTemplate.version).toEqual('1');
@@ -477,7 +477,7 @@ describe('UCA Constructions tests', () => {
 
 
   test('Get template for complex uca 3', () => {
-    const ucaTemplate = UCA.getTemplateFor('cvc:Identity:address', '1');
+    const ucaTemplate = UCA.getUCAProps('cvc:Identity:address', '1');
     expect(ucaTemplate).toBeDefined();
     expect(ucaTemplate.identifier).toEqual('cvc:Identity:address');
     expect(ucaTemplate.version).toEqual('1');
@@ -486,7 +486,7 @@ describe('UCA Constructions tests', () => {
   });
 
   test('Get template for simple uca', () => {
-    const ucaTemplate = UCA.getTemplateFor('cvc:Verify:phoneNumberToken', '1');
+    const ucaTemplate = UCA.getUCAProps('cvc:Verify:phoneNumberToken', '1');
     expect(ucaTemplate).toBeDefined();
     expect(ucaTemplate.identifier).toEqual('cvc:Verify:phoneNumberToken');
     expect(ucaTemplate.version).toEqual('1');
@@ -502,7 +502,7 @@ describe('UCA Constructions tests', () => {
       },
     ];
 
-    const ucaValue = UCA.getValueFromProps('cvc:Verify:phoneNumberToken', propValues, '1');
+    const ucaValue = UCA.parseValueFromProps('cvc:Verify:phoneNumberToken', propValues, '1');
     expect(ucaValue).toEqual('1234');
     function createUCA() {
       return new UCA('cvc:Verify:phoneNumberToken', ucaValue, '1');
@@ -511,7 +511,7 @@ describe('UCA Constructions tests', () => {
   });
 
   test('Construct UCA from PropertyValuePair', () => {
-    const ucaTemplate = UCA.getTemplateFor('cvc:Verify:phoneNumberToken', '1');
+    const ucaTemplate = UCA.getUCAProps('cvc:Verify:phoneNumberToken', '1');
     expect(ucaTemplate).toBeDefined();
     expect(ucaTemplate.identifier).toEqual('cvc:Verify:phoneNumberToken');
     expect(ucaTemplate.version).toEqual('1');

@@ -193,7 +193,7 @@ class UserCollectableAttribute {
     return properties;
   }
 
-  static getTemplateFor(identifier, version) {
+  static getUCAProps(identifier, version) {
     const definition = version ? _.find(definitions, { identifier, version }) : _.find(definitions, { identifier });
     if (!definition) {
       return handleNotFoundDefinition(identifier, version);
@@ -224,8 +224,8 @@ class UserCollectableAttribute {
     return ucaTemplate;
   }
 
-  static getValueFromProps(identifier, props, ucaVersion) {
-    const ucaProps = UserCollectableAttribute.getTemplateFor(identifier, ucaVersion);
+  static parseValueFromProps(identifier, props, ucaVersion) {
+    const ucaProps = UserCollectableAttribute.getUCAProps(identifier, ucaVersion);
 
     const flattenProps = {};
     _.each(ucaProps.properties, (p) => {
