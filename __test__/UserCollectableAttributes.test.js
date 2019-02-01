@@ -7,7 +7,7 @@ describe('UCA Constructions tests', () => {
       return new UCA('name.first', 'joao');
     }
 
-    expect(createUCA).toThrowError('name.first is not defined');
+    expect(createUCA).toThrowError();
   });
 
   test('UCA construction should succeed', () => {
