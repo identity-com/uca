@@ -53,13 +53,13 @@ const getObjectBasePropName = (definitions, typeDefinition, pathName) => {
     let basePropName;
     const baseIdentifierComponents = _.split(typeDefinition.identifier, ':');
     if (pathName) {
-      if (_.includes(pathName, _.lowerCase(baseIdentifierComponents[1]))) {
+      if (_.includes(pathName, _.camelCase(baseIdentifierComponents[1]))) {
         basePropName = `${pathName}.${baseIdentifierComponents[2]}`;
       } else {
-        basePropName = `${pathName}.${_.lowerCase(baseIdentifierComponents[1])}.${baseIdentifierComponents[2]}`;
+        basePropName = `${pathName}.${_.camelCase(baseIdentifierComponents[1])}.${baseIdentifierComponents[2]}`;
       }
     } else {
-      basePropName = `${_.lowerCase(baseIdentifierComponents[1])}.${baseIdentifierComponents[2]}`;
+      basePropName = `${_.camelCase(baseIdentifierComponents[1])}.${baseIdentifierComponents[2]}`;
     }
     return basePropName;
   }

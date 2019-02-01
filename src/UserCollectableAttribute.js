@@ -58,7 +58,7 @@ const getUCATemplateProperties = (identifier, required, version, pathName) => {
     properties.push(JSON.parse(JSON.stringify(p)));
   } else {
     const identifierComponents = _.split(identifier, ':');
-    const name = `${_.lowerCase(identifierComponents[1])}.${identifierComponents[2]}`;
+    const name = `${_.camelCase(identifierComponents[1])}.${identifierComponents[2]}`;
     const p = new UCATemplateValue(name, null, definition.type, definition.identifier, required, version);
     properties.push(JSON.parse(JSON.stringify(p)));
   }
@@ -187,7 +187,7 @@ class UserCollectableAttribute {
       properties.push(propertiesName);
     } else {
       const identifierComponents = _.split(identifier, ':');
-      const propertiesName = `${_.lowerCase(identifierComponents[1])}.${identifierComponents[2]}`;
+      const propertiesName = `${_.camelCase(identifierComponents[1])}.${identifierComponents[2]}`;
       properties.push(propertiesName);
     }
     return properties;
@@ -214,7 +214,7 @@ class UserCollectableAttribute {
       ucaTemplate.basePropertyName = basePropertyName;
     } else {
       const identifierComponents = _.split(identifier, ':');
-      const basePropertyName = `${_.lowerCase(identifierComponents[1])}.${identifierComponents[2]}`;
+      const basePropertyName = `${_.camelCase(identifierComponents[1])}.${identifierComponents[2]}`;
       ucaTemplate.basePropertyName = basePropertyName;
     }
 

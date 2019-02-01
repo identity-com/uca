@@ -485,6 +485,21 @@ describe('UCA Constructions tests', () => {
     expect(ucaTemplate.properties.length).toEqual(7);
   });
 
+  test('Get template for complex uca 4', () => {
+    const ucaTemplate = UCA.getUCAProps('cvc:SocialSecurity:number', '1');
+    expect(ucaTemplate).toBeDefined();
+    expect(ucaTemplate.identifier).toEqual('cvc:SocialSecurity:number');
+    expect(ucaTemplate.version).toEqual('1');
+    expect(ucaTemplate.basePropertyName).toEqual('socialSecurity.number');
+    expect(ucaTemplate.properties.length).toEqual(3);
+    expect(ucaTemplate.properties[0].name).toEqual('socialSecurity.number.areaNumber');
+    expect(ucaTemplate.properties[0].value).toEqual(null);
+    expect(ucaTemplate.properties[0].meta.required).toEqual(true);
+    expect(ucaTemplate.properties[0].meta.identifier).toEqual('cvc:SocialSecurity:areaNumber');
+    expect(ucaTemplate.properties[0].meta.type).toEqual('String');
+    expect(ucaTemplate.properties[0].meta.version).toEqual('1');
+  });
+
   test('Get template for simple uca', () => {
     const ucaTemplate = UCA.getUCAProps('cvc:Verify:phoneNumberToken', '1');
     expect(ucaTemplate).toBeDefined();
