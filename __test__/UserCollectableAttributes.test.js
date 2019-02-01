@@ -457,7 +457,7 @@ describe('UCA Constructions tests', () => {
     function createUCA() {
       return new UCA('cvc:Contact:email', ucaValue, '1');
     }
-    expect(createUCA).not.toThrowError('name.first is not defined');
+    expect(createUCA).not.toThrowError();
   });
 
   test('Get template for complex uca 2', () => {
