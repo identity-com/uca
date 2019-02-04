@@ -196,7 +196,7 @@ class UserCollectableAttribute {
   static getUCAProps(identifier, version) {
     const definition = version ? _.find(definitions, { identifier, version }) : _.find(definitions, { identifier });
     if (!definition) {
-      return handleNotFoundDefinition(identifier, version);
+      return handleNotFoundDefinition(definitions, identifier, version);
     }
 
     const ucaTemplate = {
