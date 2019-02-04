@@ -21,12 +21,11 @@ const handleNotFoundDefinition = (myDefinitions, identifier, version) => {
 };
 
 class UCATemplateValue {
-  constructor(name, value, type, identifier, required, version) {
-    this.name = name;
-    this.value = value;
+  constructor(identifier, type, propertyName, required, version) {
+    this.name = identifier;
     this.meta = {
       required,
-      identifier,
+      propertyName,
       type,
       version,
     };
@@ -53,13 +52,13 @@ const getUCATemplateProperties = (identifier, required, version, pathName) => {
       _.forEach(proProperties, (p) => { properties.push(p); });
     });
   } else if (pathName) {
-    const name = `${pathName}.${_.split(definition.identifier, ':')[2]}`;
-    const p = new UCATemplateValue(name, null, definition.type, definition.identifier, required, version);
+    const propertyName = `${pathName}.${_.split(definition.identifier, ':')[2]}`;
+    const p = new UCATemplateValue(definition.identifier, definition.type, propertyName, required, version);
     properties.push(JSON.parse(JSON.stringify(p)));
   } else {
     const identifierComponents = _.split(identifier, ':');
-    const name = `${_.camelCase(identifierComponents[1])}.${identifierComponents[2]}`;
-    const p = new UCATemplateValue(name, null, definition.type, definition.identifier, required, version);
+    const propertyName = `${_.camelCase(identifierComponents[1])}.${identifierComponents[2]}`;
+    const p = new UCATemplateValue(definition.identifier, definition.type, propertyName, required, version);
     properties.push(JSON.parse(JSON.stringify(p)));
   }
   return properties;
@@ -200,7 +199,7 @@ class UserCollectableAttribute {
     }
 
     const ucaTemplate = {
-      identifier,
+      name: identifier,
       version: definition.version,
       basePropertyName: '',
       properties: [],
