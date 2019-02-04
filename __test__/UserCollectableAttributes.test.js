@@ -429,22 +429,22 @@ describe('UCA Constructions tests', () => {
     expect(ucaTemplate.properties[0].meta.version).toEqual('1');
   });
 
-  test.skip('Get value from template property/value and create UCA', () => {
+  test('Get value from template property/value and create UCA', () => {
     const propValues = [
       {
-        name: 'contact.email.username',
+        name: 'cvc:Email:username',
         value: 'savio',
       },
       {
-        name: 'contact.email.domain.name',
+        name: 'cvc:Domain:name',
         value: 'civic',
       },
       {
-        name: 'contact.email.domain.tld',
+        name: 'cvc:Domain:tld',
         value: 'com',
       },
       {
-        name: 'contact.email.invalidOne',
+        name: 'cvc:Invalid:one',
         value: 'invalid',
       },
     ];
@@ -506,10 +506,10 @@ describe('UCA Constructions tests', () => {
     expect(ucaTemplate.properties.length).toEqual(1);
   });
 
-  test.skip('Get value from template property/value and create simple UCA', () => {
+  test('Get value from template property/value and create simple UCA', () => {
     const propValues = [
       {
-        name: 'verify.phoneNumberToken',
+        name: 'cvc:Verify:phoneNumberToken',
         value: '1234',
       },
     ];

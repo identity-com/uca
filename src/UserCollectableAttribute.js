@@ -229,7 +229,9 @@ class UserCollectableAttribute {
     const flattenProps = {};
     _.each(ucaProps.properties, (p) => {
       const fProp = _.find(props, { name: p.name });
-      if (fProp) flattenProps[fProp.name] = fProp.value;
+      if (fProp) {
+        flattenProps[p.meta.propertyName] = fProp.value;
+      }
     });
 
     const value = flatten.unflatten(flattenProps);

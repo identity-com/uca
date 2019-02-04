@@ -273,42 +273,39 @@ JSON String
 ```js
 const ucaTemplate = UCA.getUCAProps('cvc:Contact:email', '1');
   //  ucaTemplate = {
-  //     "identifier": "cvc:Contact:email",
+  //     "name": "cvc:Contact:email",
   //     "version": "1",
   //     "basePropertyName": "contact.email",
   //     "properties": [
   //       {
-  //         "name": "contact.email.username",
-  //         "value": null,
+  //         "name": "cvc:Email:username",
   //         "meta": {
   //           "required": false,
-  //           "identifier": "cvc:Email:username",
+  //           "propertyName": "contact.email.username",
   //           "type": "String",
   //           "version": "1"
   //         }
   //       },
   //       {
-  //         "name": "contact.email.domain.tld",
-  //         "value": null,
+  //         "name": "cvc:Domain:tld",
   //         "meta": {
   //           "required": true,
-  //           "identifier": "cvc:Domain:tld",
+  //           "propertyName": "contact.email.domain.tld",
   //           "type": "String",
   //           "version": "1"
   //         }
   //       },
   //       {
-  //         "name": "contact.email.domain.name",
-  //         "value": null,
+  //         "name": "cvc:Domain:name",
   //         "meta": {
   //           "required": true,
-  //           "identifier": "cvc:Domain:name",
+  //           "propertyName": "contact.email.domain.name",
   //           "type": "String",
   //           "version": "1"
   //         }
   //       }
   //     ]
-  //   }
+  //  }
 ```
 
 So you can use the above `properties` array as a template for defining new UCA values. Given an array of properties and values, you can get a ucaValue ready for use on a new UCA:
@@ -316,15 +313,15 @@ So you can use the above `properties` array as a template for defining new UCA v
 ```js
 const propValues = [
   {
-    name: 'contact.email.username',
+    name: 'cvc:Email:username',
     value: 'savio',
   },
   {
-    name: 'contact.email.domain.name',
+    name: 'cvc:Domain:name',
     value: 'civic',
   },
   {
-    name: 'contact.email.domain.tld',
+    name: 'cvc:Domain:tld',
     value: 'com',
   },
 ];
