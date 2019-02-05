@@ -1,12 +1,68 @@
 const _ = require('lodash');
 const timestamp = require('unix-timestamp');
 const uuidv4 = require('uuid/v4');
+const flatten = require('flat');
 const definitions = require('./definitions');
 const {
-  resolveType, isValueOfType, getTypeName,
+  resolveType, isValueOfType, getTypeName, getTypeDefinition, getObjectBasePropName, getObjectTypeDefProps,
 } = require('./utils');
 
 const isAttestableValue = value => (value && value.attestableValue);
+
+const handleNotFoundDefinition = (myDefinitions, identifier, version) => {
+  if (version != null) {
+    const definition = _.find(myDefinitions, { identifier });
+    if (definition) {
+      throw new Error(`Version ${version} is not supported for the identifier ${identifier}`);
+    }
+  }
+
+  throw new Error(`${identifier} is not defined`);
+};
+
+class UCATemplateValue {
+  constructor(identifier, type, propertyName, required, version) {
+    this.name = identifier;
+    this.meta = {
+      required,
+      propertyName,
+      type,
+      version,
+    };
+  }
+}
+
+const getUCATemplateProperties = (identifier, required, version, pathName) => {
+  const definition = version ? _.find(definitions, { identifier, version }) : _.find(definitions, { identifier });
+  if (!definition) {
+    return handleNotFoundDefinition(definitions, identifier, version);
+  }
+  const typeDefinition = getTypeDefinition(definitions, identifier);
+
+  const properties = [];
+
+  if (typeDefinition && getTypeName(typeDefinition, definitions) === 'Object') {
+    const typeDefProps = getObjectTypeDefProps(definitions, typeDefinition);
+    const basePropName = getObjectBasePropName(definitions, typeDefinition, pathName);
+
+    _.forEach(typeDefProps, (prop) => {
+      const typeSuffix = _.split(prop.type, ':')[2];
+      const newBasePropName = prop.name === typeSuffix ? basePropName : `${basePropName}.${prop.name}`;
+      const proProperties = getUCATemplateProperties(prop.type, prop.required, version, newBasePropName);
+      _.forEach(proProperties, (p) => { properties.push(p); });
+    });
+  } else if (pathName) {
+    const propertyName = `${pathName}.${_.split(definition.identifier, ':')[2]}`;
+    const p = new UCATemplateValue(definition.identifier, definition.type, propertyName, required, version);
+    properties.push(JSON.parse(JSON.stringify(p)));
+  } else {
+    const identifierComponents = _.split(identifier, ':');
+    const propertyName = `${_.camelCase(identifierComponents[1])}.${identifierComponents[2]}`;
+    const p = new UCATemplateValue(definition.identifier, definition.type, propertyName, required, version);
+    properties.push(JSON.parse(JSON.stringify(p)));
+  }
+  return properties;
+};
 
 /**
  * Creates new UCA instances
@@ -32,7 +88,7 @@ class UserCollectableAttribute {
       ? _.find(this.definitions, { identifier, version }) : _.find(this.definitions, { identifier });
 
     if (!definition) {
-      return this.handleNotFoundDefinition(identifier, version);
+      return handleNotFoundDefinition(this.definitions, identifier, version);
     }
 
     this.timestamp = null;
@@ -72,17 +128,6 @@ class UserCollectableAttribute {
     return this;
   }
 
-  handleNotFoundDefinition(identifier, version) {
-    if (version != null) {
-      const definition = _.find(this.definitions, { identifier });
-      if (definition) {
-        throw new Error(`Version ${version} is not supported for the identifier ${identifier}`);
-      }
-    }
-
-    throw new Error(`${identifier} is not defined`);
-  }
-
   initializeAttestableValue() {
     throw new Error(`UserCollectableAttribute must not receive attestable value: ${JSON.stringify(this.value)}`);
   }
@@ -119,29 +164,11 @@ class UserCollectableAttribute {
   static getAllProperties(identifier, pathName) {
     const definition = _.find(definitions, { identifier });
     const properties = [];
-    const type = resolveType(definition, definitions);
-    const typeDefinition = _.isString(type) ? _.find(definitions, { identifier: type }) : definition;
+    const typeDefinition = getTypeDefinition(definitions, identifier);
 
     if (typeDefinition && getTypeName(typeDefinition, definitions) === 'Object') {
-      let typeDefProps;
-      if (typeDefinition.type.properties) {
-        typeDefProps = typeDefinition.type.properties;
-      } else {
-        const typeDefDefinition = _.find(definitions, { identifier: typeDefinition.type });
-        typeDefProps = resolveType(typeDefDefinition, definitions).properties;
-      }
-
-      let basePropName;
-      const baseIdentifierComponents = _.split(typeDefinition.identifier, ':');
-      if (pathName) {
-        if (_.includes(pathName, _.lowerCase(baseIdentifierComponents[1]))) {
-          basePropName = `${pathName}.${baseIdentifierComponents[2]}`;
-        } else {
-          basePropName = `${pathName}.${_.lowerCase(baseIdentifierComponents[1])}.${baseIdentifierComponents[2]}`;
-        }
-      } else {
-        basePropName = `${_.lowerCase(baseIdentifierComponents[1])}.${baseIdentifierComponents[2]}`;
-      }
+      const typeDefProps = getObjectTypeDefProps(definitions, typeDefinition);
+      const basePropName = getObjectBasePropName(definitions, typeDefinition, pathName);
 
       if (_.includes(['String', 'Number', 'Boolean'], `${typeDefProps.type}`)) {
         // Properties is not an object
@@ -159,12 +186,59 @@ class UserCollectableAttribute {
       properties.push(propertiesName);
     } else {
       const identifierComponents = _.split(identifier, ':');
-      const propertiesName = `${_.lowerCase(identifierComponents[1])}.${identifierComponents[2]}`;
+      const propertiesName = `${_.camelCase(identifierComponents[1])}.${identifierComponents[2]}`;
       properties.push(propertiesName);
     }
     return properties;
   }
 
+  static getUCAProps(identifier, version) {
+    const definition = version ? _.find(definitions, { identifier, version }) : _.find(definitions, { identifier });
+    if (!definition) {
+      return handleNotFoundDefinition(definitions, identifier, version);
+    }
+
+    const ucaTemplate = {
+      name: identifier,
+      version: definition.version,
+      basePropertyName: '',
+      properties: [],
+    };
+
+    const typeDefinition = getTypeDefinition(definitions, identifier);
+
+    // If Object
+    if (typeDefinition && getTypeName(typeDefinition, definitions) === 'Object') {
+      const basePropertyName = getObjectBasePropName(definitions, typeDefinition);
+      ucaTemplate.basePropertyName = basePropertyName;
+    } else {
+      const identifierComponents = _.split(identifier, ':');
+      const basePropertyName = `${_.camelCase(identifierComponents[1])}.${identifierComponents[2]}`;
+      ucaTemplate.basePropertyName = basePropertyName;
+    }
+
+    const isSimplePropertiesRequired = true;
+    ucaTemplate.properties = getUCATemplateProperties(identifier, isSimplePropertiesRequired, version);
+
+    return ucaTemplate;
+  }
+
+  static parseValueFromProps(identifier, props, ucaVersion) {
+    const ucaProps = UserCollectableAttribute.getUCAProps(identifier, ucaVersion);
+
+    const flattenProps = {};
+    _.each(ucaProps.properties, (p) => {
+      const fProp = _.find(props, { name: p.name });
+      if (fProp) {
+        flattenProps[p.meta.propertyName] = fProp.value;
+      }
+    });
+
+    const value = flatten.unflatten(flattenProps);
+    const stripedValue = _.get(value, ucaProps.basePropertyName);
+
+    return stripedValue;
+  }
 
   static isValid(value, type, definition) {
     switch (type) {
