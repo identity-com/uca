@@ -268,6 +268,76 @@ JSON String
 
 ```
 
+##### Getting UCA properties template and generation values
+
+```js
+const ucaTemplate = UCA.getUCAProps('cvc:Contact:email', '1');
+  //  ucaTemplate = {
+  //     "name": "cvc:Contact:email",
+  //     "version": "1",
+  //     "basePropertyName": "contact.email",
+  //     "properties": [
+  //       {
+  //         "name": "cvc:Email:username",
+  //         "meta": {
+  //           "required": false,
+  //           "propertyName": "contact.email.username",
+  //           "type": "String",
+  //           "version": "1"
+  //         }
+  //       },
+  //       {
+  //         "name": "cvc:Domain:tld",
+  //         "meta": {
+  //           "required": true,
+  //           "propertyName": "contact.email.domain.tld",
+  //           "type": "String",
+  //           "version": "1"
+  //         }
+  //       },
+  //       {
+  //         "name": "cvc:Domain:name",
+  //         "meta": {
+  //           "required": true,
+  //           "propertyName": "contact.email.domain.name",
+  //           "type": "String",
+  //           "version": "1"
+  //         }
+  //       }
+  //     ]
+  //  }
+```
+
+So you can use the above `properties` array as a template for defining new UCA values. Given an array of properties and values, you can get a ucaValue ready for use on a new UCA:
+
+```js
+const propValues = [
+  {
+    name: 'cvc:Email:username',
+    value: 'savio',
+  },
+  {
+    name: 'cvc:Domain:name',
+    value: 'civic',
+  },
+  {
+    name: 'cvc:Domain:tld',
+    value: 'com',
+  },
+];
+
+const ucaValue = UCA.parseValueFromProps('cvc:Contact:email', propValues, '1');
+// ucaValue = {
+//   "username": "savio",
+//   "domain": {
+//     "name": "civic",
+//     "tld": "com",
+//   }
+// }
+const uca = new UCA('cvc:Contact:email', ucaValue, '1');
+
+```
+
 ## Schema Generator
 
 The json schema generator will get a previous definition and build a sample JSON (with random values).
@@ -414,13 +484,14 @@ This is used on this library on src/services/config.js
 
 ## Releases
 
-The release process is fully automated and started by Civic members when it's created a tag on Github following the pattern vX.X.X-releaseX. E.g.: v0.2.29-release1.
+The release process is fully automated and started by Civic members when it's created a tag on Github following the pattern ^release\\..*$. E.g.: `release.1`.
 
 After the creation of the tag, Circle Ci will trigger a job to:
 
 build source files
 run unit tests
 increase version number on package.json
-create the stable version tag dropping the 'release' suffix. E.g: v0.2.29
+create the stable version and tag it. E.g: v0.2.29
+remove the release.N tag
 deploy the binary file to NPM
 

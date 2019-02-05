@@ -7,7 +7,7 @@ describe('UCA Constructions tests', () => {
       return new UCA('name.first', 'joao');
     }
 
-    expect(createUCA).toThrowError('name.first is not defined');
+    expect(createUCA).toThrowError();
   });
 
   test('UCA construction should succeed', () => {
@@ -272,6 +272,14 @@ describe('UCA Constructions tests', () => {
     expect(properties).toContain('identity.name.otherNames');
   });
 
+  test('Should get ALL UCA properties name', () => {
+    const properties = UCA.getAllProperties('cvc:Identity:name');
+    expect(properties).toHaveLength(3);
+    expect(properties).toContain('identity.name.givenNames');
+    expect(properties).toContain('identity.name.familyNames');
+    expect(properties).toContain('identity.name.otherNames');
+  });
+
   test('Index initialization', () => {
     expect(ucaIndex).toBeDefined();
     expect(ucaIndex.definitions).toBeDefined();
@@ -400,5 +408,126 @@ describe('UCA Constructions tests', () => {
 
     const uca2 = new UCA('cvc:Meta:expirationDate', '-1');
     expect(uca2.credentialItem).toBeFalsy();
+  });
+
+  test('Check isValid with invalid one', () => {
+    const isValid = UCA.isValid(1, 'foo');
+    expect(isValid).toBeFalsy();
+  });
+
+  test('Get template for complex uca', () => {
+    const ucaTemplate = UCA.getUCAProps('cvc:Contact:email', '1');
+    expect(ucaTemplate).toBeDefined();
+    expect(ucaTemplate.name).toEqual('cvc:Contact:email');
+    expect(ucaTemplate.version).toEqual('1');
+    expect(ucaTemplate.basePropertyName).toEqual('contact.email');
+    expect(ucaTemplate.properties.length).toEqual(3);
+    expect(ucaTemplate.properties[0].name).toEqual('cvc:Email:username');
+    expect(ucaTemplate.properties[0].meta.required).toEqual(false);
+    expect(ucaTemplate.properties[0].meta.propertyName).toEqual('contact.email.username');
+    expect(ucaTemplate.properties[0].meta.type).toEqual('String');
+    expect(ucaTemplate.properties[0].meta.version).toEqual('1');
+  });
+
+  test('Get value from template property/value and create UCA', () => {
+    const propValues = [
+      {
+        name: 'cvc:Email:username',
+        value: 'savio',
+      },
+      {
+        name: 'cvc:Domain:name',
+        value: 'civic',
+      },
+      {
+        name: 'cvc:Domain:tld',
+        value: 'com',
+      },
+      {
+        name: 'cvc:Invalid:one',
+        value: 'invalid',
+      },
+    ];
+
+    const ucaValue = UCA.parseValueFromProps('cvc:Contact:email', propValues, '1');
+    expect(ucaValue.username).toEqual('savio');
+    expect(ucaValue.domain.name).toEqual('civic');
+    expect(ucaValue.domain.tld).toEqual('com');
+    function createUCA() {
+      return new UCA('cvc:Contact:email', ucaValue, '1');
+    }
+    expect(createUCA).not.toThrowError();
+  });
+
+  test('Get template for complex uca 2', () => {
+    const ucaTemplate = UCA.getUCAProps('cvc:Identity:dateOfBirth', '1');
+    expect(ucaTemplate).toBeDefined();
+    expect(ucaTemplate.name).toEqual('cvc:Identity:dateOfBirth');
+    expect(ucaTemplate.version).toEqual('1');
+    expect(ucaTemplate.basePropertyName).toEqual('identity.dateOfBirth');
+    expect(ucaTemplate.properties.length).toEqual(3);
+    expect(ucaTemplate.properties[0].name).toEqual('cvc:Type:day');
+    expect(ucaTemplate.properties[0].meta.required).toEqual(true);
+    expect(ucaTemplate.properties[0].meta.propertyName).toEqual('identity.dateOfBirth.day');
+    expect(ucaTemplate.properties[0].meta.type).toEqual('Number');
+    expect(ucaTemplate.properties[0].meta.version).toEqual('1');
+  });
+
+
+  test('Get template for complex uca 3', () => {
+    const ucaTemplate = UCA.getUCAProps('cvc:Identity:address', '1');
+    expect(ucaTemplate).toBeDefined();
+    expect(ucaTemplate.name).toEqual('cvc:Identity:address');
+    expect(ucaTemplate.version).toEqual('1');
+    expect(ucaTemplate.basePropertyName).toEqual('identity.address');
+    expect(ucaTemplate.properties.length).toEqual(7);
+  });
+
+  test('Get template for complex uca 4', () => {
+    const ucaTemplate = UCA.getUCAProps('cvc:SocialSecurity:number', '1');
+    expect(ucaTemplate).toBeDefined();
+    expect(ucaTemplate.name).toEqual('cvc:SocialSecurity:number');
+    expect(ucaTemplate.version).toEqual('1');
+    expect(ucaTemplate.basePropertyName).toEqual('socialSecurity.number');
+    expect(ucaTemplate.properties.length).toEqual(3);
+    expect(ucaTemplate.properties[0].name).toEqual('cvc:SocialSecurity:areaNumber');
+    expect(ucaTemplate.properties[0].meta.required).toEqual(true);
+    expect(ucaTemplate.properties[0].meta.propertyName).toEqual('socialSecurity.number.areaNumber');
+    expect(ucaTemplate.properties[0].meta.type).toEqual('String');
+    expect(ucaTemplate.properties[0].meta.version).toEqual('1');
+  });
+
+  test('Get template for simple uca', () => {
+    const ucaTemplate = UCA.getUCAProps('cvc:Verify:phoneNumberToken', '1');
+    expect(ucaTemplate).toBeDefined();
+    expect(ucaTemplate.name).toEqual('cvc:Verify:phoneNumberToken');
+    expect(ucaTemplate.version).toEqual('1');
+    expect(ucaTemplate.basePropertyName).toEqual('verify.phoneNumberToken');
+    expect(ucaTemplate.properties.length).toEqual(1);
+  });
+
+  test('Get value from template property/value and create simple UCA', () => {
+    const propValues = [
+      {
+        name: 'cvc:Verify:phoneNumberToken',
+        value: '1234',
+      },
+    ];
+
+    const ucaValue = UCA.parseValueFromProps('cvc:Verify:phoneNumberToken', propValues, '1');
+    expect(ucaValue).toEqual('1234');
+    function createUCA() {
+      return new UCA('cvc:Verify:phoneNumberToken', ucaValue, '1');
+    }
+    expect(createUCA).not.toThrowError();
+  });
+
+  test('Construct UCA from PropertyValuePair', () => {
+    const ucaTemplate = UCA.getUCAProps('cvc:Verify:phoneNumberToken', '1');
+    expect(ucaTemplate).toBeDefined();
+    expect(ucaTemplate.name).toEqual('cvc:Verify:phoneNumberToken');
+    expect(ucaTemplate.version).toEqual('1');
+    expect(ucaTemplate.basePropertyName).toEqual('verify.phoneNumberToken');
+    expect(ucaTemplate.properties.length).toEqual(1);
   });
 });

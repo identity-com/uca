@@ -20,11 +20,12 @@
     "tag": "git tag v$npm_package_version && git push --tags origin master",
     "pretag": "git fetch --tags",
     "precommit": "npm run lint",
-    "postversion": "git checkout master && git add --all && git commit -m\"build and version $npm_package_version\" -m\"[skip ci]\" && git push origin master"
+    "release:create": "hub release create -m v$npm_package_version v$npm_package_version"
   },
   "author": "Identity.com Community",
   "license": "MIT",
   "dependencies": {
+    "flat": "^4.1.0",
     "lodash": "^4.17.11",
     "unix-timestamp": "^0.2.0",
     "uuid": "^3.3.2",
