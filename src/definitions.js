@@ -408,7 +408,7 @@ const definitions = [
           type: 'cvc:Address:postalCode',
         },
       ],
-      required: ['street', 'unit', 'city', 'state', 'country'],
+      required: ['street', 'city', 'state', 'country'],
     },
     credentialItem: false,
   },
