@@ -33,6 +33,61 @@ const resolveType = (definition, definitions) => {
 };
 
 /**
+ * @param  {Object} definitions
+ * @param  {string} identifier
+ */
+const getTypeDefinition = (definitions, identifier) => {
+  const definition = _.find(definitions, { identifier });
+  const type = resolveType(definition, definitions);
+  const typeDefinition = _.isString(type) ? _.find(definitions, { identifier: type }) : definition;
+  return typeDefinition;
+};
+
+/**
+ * @param  {Object} definitions
+ * @param  {Object} typeDefinition
+ * @param  {string} pathName
+ */
+const getObjectBasePropName = (definitions, typeDefinition, pathName) => {
+  if (typeDefinition && getTypeName(typeDefinition, definitions) === 'Object') {
+    let basePropName;
+    const baseIdentifierComponents = _.split(typeDefinition.identifier, ':');
+    if (pathName) {
+      if (_.includes(pathName, _.camelCase(baseIdentifierComponents[1]))) {
+        basePropName = `${pathName}.${baseIdentifierComponents[2]}`;
+      } else {
+        basePropName = `${pathName}.${_.camelCase(baseIdentifierComponents[1])}.${baseIdentifierComponents[2]}`;
+      }
+    } else {
+      basePropName = `${_.camelCase(baseIdentifierComponents[1])}.${baseIdentifierComponents[2]}`;
+    }
+    return basePropName;
+  }
+  return undefined;
+};
+
+const flagRequeredProps = (requiredArray, props) => (
+  _.map(props, p => _.merge(p, { required: _.includes(requiredArray, p.name) }))
+);
+
+const getObjectTypeDefProps = (definitions, typeDefinition) => {
+  if (typeDefinition && getTypeName(typeDefinition, definitions) === 'Object') {
+    let typeDefProps;
+    if (typeDefinition.type.properties) {
+      typeDefProps = typeDefinition.type.properties;
+      typeDefProps = flagRequeredProps(typeDefinition.type.required, typeDefProps);
+    } else {
+      const typeDefDefinition = _.find(definitions, { identifier: typeDefinition.type });
+      const resolvedType = resolveType(typeDefDefinition, definitions);
+      typeDefProps = resolvedType.properties;
+      typeDefProps = flagRequeredProps(resolvedType.required, typeDefProps);
+    }
+    return typeDefProps;
+  }
+  return [];
+};
+
+/**
  * validate the value type
  * @param {*} value
  * @param {*} type
@@ -55,4 +110,7 @@ module.exports = {
   isValueOfType,
   getTypeName,
   getValidIdentifiers,
+  getTypeDefinition,
+  getObjectBasePropName,
+  getObjectTypeDefProps,
 };
