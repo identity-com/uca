@@ -129,6 +129,20 @@ describe('UCA Constructions tests', () => {
     expect(v.value.year.value).toBe(value.year);
   });
 
+  test('Creating date of birth UCA with the minimum valid date', () => {
+    const identifier = 'cvc:Identity:dateOfBirth';
+    const value = {
+      day: 1,
+      month: 1,
+      year: 1900,
+    };
+    const v = new UCA(identifier, value);
+    expect(v).toBeDefined();
+    expect(v.value.day.value).toBe(value.day);
+    expect(v.value.month.value).toBe(value.month);
+    expect(v.value.year.value).toBe(value.year);
+  });
+
   test('Creating date of birth with invalid day', () => {
     const identifier = 'cvc:Identity:dateOfBirth';
     const value = {
@@ -155,6 +169,20 @@ describe('UCA Constructions tests', () => {
     }
 
     expect(createUCA).toThrowError('13 is not valid for cvc:Type:month');
+  });
+
+  test('Creating date of birth with invalid year', () => {
+    const identifier = 'cvc:Identity:dateOfBirth';
+    const value = {
+      day: 31,
+      month: 12,
+      year: 1899,
+    };
+    function createUCA() {
+      return new UCA(identifier, value);
+    }
+
+    expect(createUCA).toThrowError('1899 is not valid for cvc:Type:year');
   });
 
   test('Construct by NameGivenNames must result successfuly', () => {

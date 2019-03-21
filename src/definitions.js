@@ -302,7 +302,7 @@ const definitions = [
     identifier: 'cvc:Type:year',
     version: '1',
     type: 'Number',
-    minimum: 0,
+    minimum: 1900,
   },
   {
     identifier: 'cvc:Type:date',
