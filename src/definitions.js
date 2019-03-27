@@ -293,6 +293,12 @@ const definitions = [
     credentialItem: true,
   },
   {
+    identifier: 'cvc:Document:nationality',
+    version: '1',
+    type: 'String',
+    credentialItem: true,
+  },
+  {
     identifier: 'cvc:Type:day',
     version: '1',
     type: 'Number',
