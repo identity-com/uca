@@ -254,6 +254,14 @@ const definitions = [
     credentialItem: true,
   },
   {
+    identifier: 'cvc:Document:flow',
+    description: 'Indicates if document image was uploaded',
+    version: '1',
+    type: 'String',
+    attestable: false,
+    credentialItem: false,
+  },
+  {
     identifier: 'cvc:Identity:name',
     version: '1',
     type: 'cvc:Type:Name',
