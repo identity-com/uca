@@ -506,11 +506,11 @@ const definitions = [
     type: {
       properties: [
         {
-          name: 'Bucket',
+          name: 's3FileBucket',
           type: 'cvc:Type:s3FileBucket',
         },
         {
-          name: 'Key',
+          name: 's3FileKey',
           type: 'cvc:Type:s3FileKey',
         },
         {
@@ -522,7 +522,7 @@ const definitions = [
           type: 'cvc:Type:ContentType',
         },
       ],
-      required: ['Bucket', 'Key', 'MD5', 'ContentType'],
+      required: ['s3FileBucket', 's3FileKey', 'MD5', 'ContentType'],
     },
   },
   {
