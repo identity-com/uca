@@ -271,7 +271,7 @@ const definitions = [
     identifier: 'cvc:Type:shortToken',
     version: '1',
     type: 'String',
-    pattern: '/^\\d{5}$/', // We can specify a constraint to define the type domain
+    pattern: /^\d{5}$/, // We can specify a constraint to define the type domain
     credentialItem: false,
   },
   {

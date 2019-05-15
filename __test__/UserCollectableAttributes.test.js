@@ -81,6 +81,23 @@ describe('UCA Constructions tests', () => {
     expect(createUCA).toThrow();
   });
 
+  test('Should throw error when constructing UCA with a value not matching the pattern', () => {
+    const identifier = 'cvc:Verify:phoneNumberToken';
+    const value = '1';
+    function createUCA() {
+      return new UCA(identifier, value);
+    }
+    expect(createUCA).toThrowError();
+  });
+
+  test('Should construct UCA when value matches the pattern in the definition', () => {
+    const identifier = 'cvc:Verify:phoneNumberToken';
+    const value = '12345';
+    function createUCA() {
+      return new UCA(identifier, value);
+    }
+    expect(createUCA).not.toThrowError();
+  });
 
   test('cvc:Verify:phoneNumberToken must have type equals String', () => {
     const identifier = 'cvc:Verify:phoneNumberToken';
@@ -524,12 +541,12 @@ describe('UCA Constructions tests', () => {
     const propValues = [
       {
         name: 'cvc:Verify:phoneNumberToken',
-        value: '1234',
+        value: '12345',
       },
     ];
 
     const ucaValue = UCA.parseValueFromProps('cvc:Verify:phoneNumberToken', propValues, '1');
-    expect(ucaValue).toEqual('1234');
+    expect(ucaValue).toEqual('12345');
     function createUCA() {
       return new UCA('cvc:Verify:phoneNumberToken', ucaValue, '1');
     }
