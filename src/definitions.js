@@ -271,7 +271,7 @@ const definitions = [
     identifier: 'cvc:Type:shortToken',
     version: '1',
     type: 'String',
-    pattern: '/^\\d{5}$/', // We can specify a constraint to define the type domain
+    pattern: /^\d{5}$/, // We can specify a constraint to define the type domain
     credentialItem: false,
   },
   {
@@ -601,6 +601,15 @@ const definitions = [
     identifier: 'cvc:Type:documentType',
     version: '1',
     type: 'String',
+    enum: {
+      UK_BIOMETRIC_RESIDENCE_PERMIT: 'uk_biometric_residence_permite',
+      DRIVING_LICENCE: 'driving_licence',
+      NATIONAL_IDENTITY_CARD: 'national_identity_card',
+      PASSPORT: 'passport',
+      TAX_ID: 'tax_id',
+      UNKNOWN: 'unnknown',
+      VOTER_ID: 'voter_id',
+    },
   },
   {
     identifier: 'cvc:Document:type',

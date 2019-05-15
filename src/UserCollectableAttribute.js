@@ -4,7 +4,13 @@ const uuidv4 = require('uuid/v4');
 const flatten = require('flat');
 const definitions = require('./definitions');
 const {
-  resolveType, isValueOfType, getTypeName, getTypeDefinition, getObjectBasePropName, getObjectTypeDefProps,
+  resolveType,
+  isValueOfType,
+  getTypeName,
+  resolveDefinition,
+  getTypeDefinition,
+  getObjectBasePropName,
+  getObjectTypeDefProps,
 } = require('./utils');
 
 const isAttestableValue = value => (value && value.attestableValue);
@@ -84,12 +90,7 @@ class UserCollectableAttribute {
   }
 
   initialize(identifier, value, version) {
-    const definition = version
-      ? _.find(this.definitions, { identifier, version }) : _.find(this.definitions, { identifier });
-
-    if (!definition) {
-      return handleNotFoundDefinition(this.definitions, identifier, version);
-    }
+    const definition = UserCollectableAttribute.getDefinition(identifier, version);
 
     this.timestamp = null;
     this.id = null;
@@ -97,30 +98,24 @@ class UserCollectableAttribute {
     this.version = version || definition.version;
     this.type = getTypeName(definition, this.definitions);
 
+    const originalDefinition = _.clone(definition);
     definition.type = resolveType(definition, this.definitions);
+
     if (isAttestableValue(value)) {
       this.value = value;
       this.initializeAttestableValue();
     } else if (isValueOfType(value, this.type)) {
-      // Trying to construct UCA with a normal value
+      const resolvedDefinition = resolveDefinition(originalDefinition, this.definitions);
+
       this.timestamp = timestamp.now();
-      if (!UserCollectableAttribute.isValid(value, this.type, definition)) {
+      if (!UserCollectableAttribute.isValid(value, this.type, resolvedDefinition)) {
         throw new Error(`${JSON.stringify(value)} is not valid for ${identifier}`);
       }
       this.value = value;
     } else if (_.isEmpty(definition.type.properties)) {
       throw new Error(`${JSON.stringify(value)} is not valid for ${identifier}`);
     } else {
-      const hasRequireds = _.reduce(definition.type.required, (has, required) => value[required] && has, true);
-      if (!hasRequireds) {
-        throw new Error(`Missing required fields to ${identifier}`);
-      }
-      const ucaValue = _.mapValues(_.keyBy(_.map(value, (v, k) => {
-        const propertyDef = _.find(definition.type.properties, { name: k });
-        const uca = new this.constructor(propertyDef.type, v, propertyDef.version);
-        return { key: k, value: uca };
-      }), 'key'), 'value');
-      this.value = ucaValue;
+      this.initializeValuesWithProperties(identifier, definition, value);
     }
 
     this.credentialItem = definition.credentialItem;
@@ -128,8 +123,32 @@ class UserCollectableAttribute {
     return this;
   }
 
+  initializeValuesWithProperties(identifier, definition, value) {
+    const hasRequireds = _.reduce(definition.type.required, (has, required) => value[required] && has, true);
+    if (!hasRequireds) {
+      throw new Error(`Missing required fields to ${identifier}`);
+    }
+    const ucaValue = _.mapValues(_.keyBy(_.map(value, (v, k) => {
+      const propertyDef = _.find(definition.type.properties, { name: k });
+      const uca = new this.constructor(propertyDef.type, v, propertyDef.version);
+      return { key: k, value: uca };
+    }), 'key'), 'value');
+    this.value = ucaValue;
+  }
+
   initializeAttestableValue() {
     throw new Error(`UserCollectableAttribute must not receive attestable value: ${JSON.stringify(this.value)}`);
+  }
+
+  static getDefinition(identifier, version, customDefinitions) {
+    const definitionsList = customDefinitions || definitions;
+    const definition = version
+      ? _.find(definitionsList, { identifier, version })
+      : _.find(definitionsList, { identifier });
+    if (!definition) {
+      return handleNotFoundDefinition(definitionsList, identifier, version);
+    }
+    return _.clone(definition);
   }
 
   getPlainValue(propName) {
@@ -245,7 +264,8 @@ class UserCollectableAttribute {
       case 'String':
         return (definition.pattern ? definition.pattern.test(value) : true)
           && (definition.minimumLength ? value.length >= definition.minimumLength : true)
-          && (definition.maximumLength ? value.length <= definition.minimumLength : true);
+          && (definition.maximumLength ? value.length <= definition.minimumLength : true)
+          && (definition.enum ? _.indexOf(_.values(definition.enum), value) >= 0 : true);
       case 'Number':
         return ((!_.isNil(definition.minimum)
           && definition.exclusiveMinimum ? value > definition.minimum : value >= definition.minimum)

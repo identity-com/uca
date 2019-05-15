@@ -1,6 +1,9 @@
 const definitions = require('../src/definitions');
 const {
-  getTypeDefinition, getObjectBasePropName, getObjectTypeDefProps,
+  getTypeDefinition,
+  getObjectBasePropName,
+  getObjectTypeDefProps,
+  resolveDefinition,
 } = require('../src/utils');
 
 describe('Utils tests', () => {
@@ -89,5 +92,27 @@ describe('Utils tests', () => {
 
     r = getObjectTypeDefProps(definitions, typeDefinition);
     expect(r.length).toEqual(0);
+  });
+
+  test('resolveDefinition', () => {
+    const sampleDefinitions = [
+      {
+        identifier: 'idA',
+        version: '1',
+        type: 'String',
+      },
+      {
+        identifier: 'idB',
+        version: '1',
+        type: 'idA',
+      },
+      {
+        identifier: 'idC',
+        version: '1',
+        type: 'idB',
+      },
+    ];
+    const resolvedDefinition = resolveDefinition(sampleDefinitions[2], sampleDefinitions);
+    expect(resolvedDefinition).toEqual(sampleDefinitions[0]);
   });
 });
