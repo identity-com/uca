@@ -90,7 +90,7 @@ class UserCollectableAttribute {
   }
 
   initialize(identifier, value, version) {
-    const definition = this.getDefinition(identifier, version);
+    const definition = UserCollectableAttribute.getDefinition(identifier, version);
 
     this.timestamp = null;
     this.id = null;
@@ -140,12 +140,13 @@ class UserCollectableAttribute {
     throw new Error(`UserCollectableAttribute must not receive attestable value: ${JSON.stringify(this.value)}`);
   }
 
-  getDefinition(identifier, version) {
+  static getDefinition(identifier, version, customDefinitions) {
+    const definitionsList = customDefinitions || definitions;
     const definition = version
-      ? _.find(this.definitions, { identifier, version })
-      : _.find(this.definitions, { identifier });
+      ? _.find(definitionsList, { identifier, version })
+      : _.find(definitionsList, { identifier });
     if (!definition) {
-      return handleNotFoundDefinition(this.definitions, identifier, version);
+      return handleNotFoundDefinition(definitionsList, identifier, version);
     }
     return _.clone(definition);
   }
