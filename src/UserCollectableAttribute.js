@@ -90,13 +90,7 @@ class UserCollectableAttribute {
   }
 
   initialize(identifier, value, version) {
-    const definition = _.clone(
-      version ? _.find(this.definitions, { identifier, version }) : _.find(this.definitions, { identifier }),
-    );
-
-    if (!definition) {
-      return handleNotFoundDefinition(this.definitions, identifier, version);
-    }
+    const definition = this.getDefinition(identifier, version);
 
     this.timestamp = null;
     this.id = null;
@@ -121,16 +115,7 @@ class UserCollectableAttribute {
     } else if (_.isEmpty(definition.type.properties)) {
       throw new Error(`${JSON.stringify(value)} is not valid for ${identifier}`);
     } else {
-      const hasRequireds = _.reduce(definition.type.required, (has, required) => value[required] && has, true);
-      if (!hasRequireds) {
-        throw new Error(`Missing required fields to ${identifier}`);
-      }
-      const ucaValue = _.mapValues(_.keyBy(_.map(value, (v, k) => {
-        const propertyDef = _.find(definition.type.properties, { name: k });
-        const uca = new this.constructor(propertyDef.type, v, propertyDef.version);
-        return { key: k, value: uca };
-      }), 'key'), 'value');
-      this.value = ucaValue;
+      this.initializeValuesWithProperties(identifier, definition, value);
     }
 
     this.credentialItem = definition.credentialItem;
@@ -138,8 +123,31 @@ class UserCollectableAttribute {
     return this;
   }
 
+  initializeValuesWithProperties(identifier, definition, value) {
+    const hasRequireds = _.reduce(definition.type.required, (has, required) => value[required] && has, true);
+    if (!hasRequireds) {
+      throw new Error(`Missing required fields to ${identifier}`);
+    }
+    const ucaValue = _.mapValues(_.keyBy(_.map(value, (v, k) => {
+      const propertyDef = _.find(definition.type.properties, { name: k });
+      const uca = new this.constructor(propertyDef.type, v, propertyDef.version);
+      return { key: k, value: uca };
+    }), 'key'), 'value');
+    this.value = ucaValue;
+  }
+
   initializeAttestableValue() {
     throw new Error(`UserCollectableAttribute must not receive attestable value: ${JSON.stringify(this.value)}`);
+  }
+
+  getDefinition(identifier, version) {
+    const definition = version
+      ? _.find(this.definitions, { identifier, version })
+      : _.find(this.definitions, { identifier });
+    if (!definition) {
+      return handleNotFoundDefinition(this.definitions, identifier, version);
+    }
+    return _.clone(definition);
   }
 
   getPlainValue(propName) {
