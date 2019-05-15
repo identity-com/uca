@@ -52,15 +52,15 @@ describe('UCA Constructions tests', () => {
   });
 
   test('Should construct UCA which type is of another UCA', () => {
-    const identifier = 'cvc:Type:MyDay';
-    const value = 30;
+    const identifier = 'cvc:Verify:phoneNumberToken';
+    const value = '12345';
     const uca = new UCA(identifier, value);
     expect(uca).toBeDefined();
   });
 
   test('Should apply constraints when constructing UCA from another UCA type', () => {
-    const identifier = 'cvc:Type:MyDay';
-    const value = 35;
+    const identifier = 'cvc:Verify:phoneNumberToken';
+    const value = 'incorrect-format-token';
     expect(() => (
       new UCA(identifier, value)
     )).toThrow();

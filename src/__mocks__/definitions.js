@@ -296,7 +296,7 @@ const definitions = [
     identifier: 'cvc:Type:shortToken',
     version: '1',
     type: 'String',
-    pattern: '/^\\d{5}$/', // We can specify a constraint to define the type domain
+    pattern: /^\d{5}$/, // We can specify a constraint to define the type domain
     credentialItem: false,
   },
   {
@@ -325,11 +325,6 @@ const definitions = [
     exclusiveMinimum: true,
     maximum: 32,
     exclusiveMaximum: true,
-  },
-  {
-    identifier: 'cvc:Type:MyDay',
-    version: '1',
-    type: 'cvc:Type:day',
   },
   {
     identifier: 'cvc:Type:month',
