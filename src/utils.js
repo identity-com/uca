@@ -18,6 +18,15 @@ const getTypeName = (definition, definitions) => {
   return 'Object';
 };
 
+const resolveDefinition = (definition, definitions) => {
+  if (_.isString(definition.type)
+      && _.includes(getValidIdentifiers(definitions), definition.type)) {
+    const innerDefinition = _.find(definitions, { identifier: definition.type });
+    return resolveDefinition(innerDefinition, definitions);
+  }
+  return definition;
+};
+
 const resolveType = (definition, definitions) => {
   const typeName = getTypeName(definition, definitions);
   if (!(typeName === 'Object')) {
@@ -107,6 +116,7 @@ const isValueOfType = (value, type) => {
 
 module.exports = {
   resolveType,
+  resolveDefinition,
   isValueOfType,
   getTypeName,
   getValidIdentifiers,

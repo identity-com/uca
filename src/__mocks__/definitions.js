@@ -327,6 +327,11 @@ const definitions = [
     exclusiveMaximum: true,
   },
   {
+    identifier: 'cvc:Type:MyDay',
+    version: '1',
+    type: 'cvc:Type:day',
+  },
+  {
     identifier: 'cvc:Type:month',
     version: '1',
     type: 'Number',

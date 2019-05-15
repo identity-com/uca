@@ -50,4 +50,19 @@ describe('UCA Constructions tests', () => {
     expect(v.value.month.value).toBe(value.month);
     expect(v.value.year.value).toBe(value.year);
   });
+
+  test('Should construct UCA which type is of another UCA', () => {
+    const identifier = 'cvc:Type:MyDay';
+    const value = 30;
+    const uca = new UCA(identifier, value);
+    expect(uca).toBeDefined();
+  });
+
+  test('Should apply constraints when constructing UCA from another UCA type', () => {
+    const identifier = 'cvc:Type:MyDay';
+    const value = 35;
+    expect(() => (
+      new UCA(identifier, value)
+    )).toThrow();
+  });
 });
