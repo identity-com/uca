@@ -90,8 +90,9 @@ class UserCollectableAttribute {
   }
 
   initialize(identifier, value, version) {
-    const definition = version
-      ? _.find(this.definitions, { identifier, version }) : _.find(this.definitions, { identifier });
+    const definition = _.clone(
+      version ? _.find(this.definitions, { identifier, version }) : _.find(this.definitions, { identifier }),
+    );
 
     if (!definition) {
       return handleNotFoundDefinition(this.definitions, identifier, version);
