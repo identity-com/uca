@@ -601,6 +601,15 @@ const definitions = [
     identifier: 'cvc:Type:documentType',
     version: '1',
     type: 'String',
+    enum: {
+      BIOMETRIC_RESIDENCE_PERMIT: 'biometric_residence_permite',
+      DRIVING_LICENCE: 'driving_licence',
+      NATIONAL_IDENTITY_CARD: 'national_identity_card',
+      PASSPORT: 'passport',
+      TAX_ID: 'tax_id',
+      UNKNOWN: 'unnknown',
+      VOTER_ID: 'voter_id',
+    },
   },
   {
     identifier: 'cvc:Document:type',

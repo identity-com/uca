@@ -81,6 +81,24 @@ describe('UCA Constructions tests', () => {
     expect(createUCA).toThrow();
   });
 
+  test('Should throw error when constructing UCA with a value not in the enum definition', () => {
+    const identifier = 'cvc:Document:type';
+    const value = 'invalid-document-type';
+    function createUCA() {
+      return new UCA(identifier, value);
+    }
+    expect(createUCA).toThrowError();
+  });
+
+  test('Should construct UCA when value is in the enum definition', () => {
+    const identifier = 'cvc:Document:type';
+    const value = 'passport';
+    function createUCA() {
+      return new UCA(identifier, value);
+    }
+    expect(createUCA).not.toThrowError();
+  });
+
   test('Should throw error when constructing UCA with a value not matching the pattern', () => {
     const identifier = 'cvc:Verify:phoneNumberToken';
     const value = '1';

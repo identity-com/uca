@@ -254,7 +254,8 @@ class UserCollectableAttribute {
       case 'String':
         return (definition.pattern ? definition.pattern.test(value) : true)
           && (definition.minimumLength ? value.length >= definition.minimumLength : true)
-          && (definition.maximumLength ? value.length <= definition.minimumLength : true);
+          && (definition.maximumLength ? value.length <= definition.minimumLength : true)
+          && (definition.enum ? _.indexOf(_.values(definition.enum), value) >= 0 : true);
       case 'Number':
         return ((!_.isNil(definition.minimum)
           && definition.exclusiveMinimum ? value > definition.minimum : value >= definition.minimum)
