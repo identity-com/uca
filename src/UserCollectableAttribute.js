@@ -90,7 +90,7 @@ class UserCollectableAttribute {
   }
 
   initialize(identifier, value, version) {
-    const definition = UserCollectableAttribute.getDefinition(identifier, version);
+    const definition = UserCollectableAttribute.getDefinition(identifier, version, this.definitions);
 
     this.timestamp = null;
     this.id = null;
