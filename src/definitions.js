@@ -603,7 +603,7 @@ const definitions = [
     type: 'String',
     enum: {
       UK_BIOMETRIC_RESIDENCE_PERMIT: 'uk_biometric_residence_permit',
-      DRIVING_LICENCE: 'driving_licence',
+      DRIVING_LICENSE: 'driving_license',
       NATIONAL_IDENTITY_CARD: 'national_identity_card',
       PASSPORT: 'passport',
       TAX_ID: 'tax_id',
