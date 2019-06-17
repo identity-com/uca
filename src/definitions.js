@@ -305,8 +305,7 @@ const definitions = [
       {
         name: 'selfie',
         type: 'cvc:Type:evidence',
-      }],
-      required: ['day', 'month', 'year'],
+      }]
     },
   },
   {
