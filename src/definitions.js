@@ -262,6 +262,54 @@ const definitions = [
     credentialItem: false,
   },
   {
+    identifier: 'cvc:Hash:algorithm',
+    version: '1',
+    type: 'string',
+    enum: {
+      SHA256: 'SHA256',
+      MD5: 'MD5',
+    },
+  },
+  {
+    identifier: 'cvc:Hash:data',
+    version: '1',
+    type: 'string',
+  },
+  {
+    identifier: 'cvc:Type:evidence',
+    type: {
+      properties: [
+        {
+          name: 'algorithm',
+          type: 'cvc:Hash:algorithm',
+        },
+        {
+          name: 'data',
+          type: 'cvc:Hash:data',
+        },
+      ],
+      required: ['algorithm', 'data'],
+    },
+  },
+  {
+    identifier: 'cvc:Validation:evidences',
+    type: {
+      properties: [{
+        name: 'idDocumentFront',
+        type: 'cvc:Type:evidence',
+      },
+      {
+        name: 'idDocumentBack',
+        type: 'cvc:Type:evidence',
+      },
+      {
+        name: 'selfie',
+        type: 'cvc:Type:evidence',
+      }],
+      required: ['day', 'month', 'year'],
+    },
+  },
+  {
     identifier: 'cvc:Identity:name',
     version: '1',
     type: 'cvc:Type:Name',
@@ -502,6 +550,31 @@ const definitions = [
   },
   {
     identifier: 'cvc:Type:S3FileRef',
+    version: '1',
+    type: {
+      properties: [
+        {
+          name: 's3FileBucket',
+          type: 'cvc:Type:s3FileBucket',
+        },
+        {
+          name: 's3FileKey',
+          type: 'cvc:Type:s3FileKey',
+        },
+        {
+          name: 'MD5',
+          type: 'cvc:Type:MD5',
+        },
+        {
+          name: 'ContentType',
+          type: 'cvc:Type:ContentType',
+        },
+      ],
+      required: ['s3FileBucket', 's3FileKey', 'MD5', 'ContentType'],
+    },
+  },
+  {
+    identifier: 'cvc:S3Ref:selfie',
     version: '1',
     type: {
       properties: [
