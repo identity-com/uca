@@ -273,7 +273,7 @@ const definitions = [
   {
     identifier: 'cvc:Hash:data',
     version: '1',
-    type: 'string',
+    type: 'String',
   },
   {
     identifier: 'cvc:Type:evidence',

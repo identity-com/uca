@@ -305,6 +305,46 @@ describe('UCA Constructions tests', () => {
     expect(address.id).toBeDefined();
   });
 
+  test('Construct cvc:Hash:algorithm', () => {
+    const identifier = 'cvc:Hash:algorithm';
+    const hashAlgorithm = new UCA(identifier, 'MD5');
+
+    expect(hashAlgorithm.id).toBeDefined();
+
+    const plain = hashAlgorithm.getPlainValue();
+    expect(plain).toBe('MD5');
+  });
+
+  test('Construct cvc:Type:evidence', () => {
+    const identifier = 'cvc:Type:evidence';
+    const evidence = new UCA(identifier, {
+      algorithm: 'MD5',
+      data: '8e55a2c4a1f018314c1e8d3bead078fb',
+    });
+
+    expect(evidence.id).toBeDefined();
+
+    const plain = evidence.getPlainValue();
+    expect(plain.algorithm).toBe('MD5');
+    expect(plain.data).toBe('8e55a2c4a1f018314c1e8d3bead078fb');
+  });
+
+  test('Construct cvc:Validation:evidences', () => {
+    const identifier = 'cvc:Validation:evidences';
+    const idDocumentFront = { algorithm: 'MD5', data: '8e55a2c4a1f018314c1e8d3bead078fb' };
+    const idDocumentBack = { algorithm: 'MD5', data: 'b698226a9595562690f9121cc6bfa2a1' };
+    const selfie = { algorithm: 'MD5', data: '0c64397149b22323edcdee35e3507b03' };
+
+    const evidences = new UCA(identifier, { idDocumentFront, idDocumentBack, selfie });
+
+    expect(evidences.id).toBeDefined();
+
+    const plain = evidences.getPlainValue();
+    expect(plain.idDocumentFront).toEqual(idDocumentFront);
+    expect(plain.idDocumentBack).toEqual(idDocumentBack);
+    expect(plain.selfie).toEqual(selfie);
+  });
+
   test('Should get ALL UCA properties email', () => {
     const properties = UCA.getAllProperties('cvc:Contact:email');
     expect(properties).toHaveLength(3);
