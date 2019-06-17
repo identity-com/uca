@@ -264,7 +264,7 @@ const definitions = [
   {
     identifier: 'cvc:Hash:algorithm',
     version: '1',
-    type: 'string',
+    type: 'String',
     enum: {
       SHA256: 'SHA256',
       MD5: 'MD5',
