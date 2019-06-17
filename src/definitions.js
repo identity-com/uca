@@ -292,19 +292,31 @@ const definitions = [
     },
   },
   {
+    identifier: 'cvc:Type:idDocumentFront',
+    type: 'cvc:Type:evidence',
+  },
+  {
+    identifier: 'cvc:Type:idDocumentBack',
+    type: 'cvc:Type:evidence',
+  },
+  {
+    identifier: 'cvc:Type:selfie',
+    type: 'cvc:Type:evidence',
+  },
+  {
     identifier: 'cvc:Validation:evidences',
     type: {
       properties: [{
         name: 'idDocumentFront',
-        type: 'cvc:Type:evidence',
+        type: 'cvc:Type:idDocumentFront',
       },
       {
         name: 'idDocumentBack',
-        type: 'cvc:Type:evidence',
+        type: 'cvc:Type:idDocumentBack',
       },
       {
         name: 'selfie',
-        type: 'cvc:Type:evidence',
+        type: 'cvc:Type:selfie',
       }],
     },
   },
