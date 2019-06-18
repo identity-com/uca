@@ -266,8 +266,8 @@ const definitions = [
     version: '1',
     type: 'String',
     enum: {
-      SHA256: 'SHA256',
-      MD5: 'MD5',
+      SHA256: 'sha256',
+      MD5: 'md5',
     },
   },
   {
