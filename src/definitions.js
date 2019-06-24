@@ -277,6 +277,7 @@ const definitions = [
   },
   {
     identifier: 'cvc:Type:evidence',
+    version: '1',
     type: {
       properties: [
         {
@@ -293,18 +294,22 @@ const definitions = [
   },
   {
     identifier: 'cvc:Type:idDocumentFront',
+    version: '1',
     type: 'cvc:Type:evidence',
   },
   {
     identifier: 'cvc:Type:idDocumentBack',
+    version: '1',
     type: 'cvc:Type:evidence',
   },
   {
     identifier: 'cvc:Type:selfie',
+    version: '1',
     type: 'cvc:Type:evidence',
   },
   {
     identifier: 'cvc:Validation:evidences',
+    version: '1',
     type: {
       properties: [{
         name: 'idDocumentFront',
