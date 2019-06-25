@@ -1,6 +1,7 @@
 /* eslint-disable no-template-curly-in-string */
 // ######################################### DEFINITIONS ###########################################
 
+// TODO split definiton of Evidences
 const definitions = [
   {
     identifier: 'cvc:Meta:issuer',
@@ -314,14 +315,17 @@ const definitions = [
       properties: [{
         name: 'idDocumentFront',
         type: 'cvc:Type:idDocumentFront',
+        deambiguify: true,
       },
       {
         name: 'idDocumentBack',
         type: 'cvc:Type:idDocumentBack',
+        deambiguify: true,
       },
       {
         name: 'selfie',
         type: 'cvc:Type:selfie',
+        deambiguify: true,
       }],
     },
   },
