@@ -151,6 +151,35 @@ class UserCollectableAttribute {
     return _.clone(definition);
   }
 
+  static fromFlattenValue(identifier, values) {
+    const meta = UserCollectableAttribute.getUCAProps(identifier);
+    const fixedValues = _.map(values, (item) => {
+      const fixedValue = _.cloneDeep(item);
+      const nameComponents = _.split(item.name, '>');
+      const name = nameComponents[0];
+      const sufix = nameComponents[1];
+      const property = _.find(meta.properties,
+        o => o.name === name && (!sufix || _.includes(o.meta.propertyName, sufix)));
+
+      if (_.get(property, 'meta.type') === 'Number') {
+        fixedValue.value = _.toNumber(item.value);
+      }
+
+      fixedValue.name = _.get(property, 'meta.propertyName');
+
+      return fixedValue;
+    });
+
+    const flattenObject = _.reduce(fixedValues, (obj, item) => {
+      // eslint-disable-next-line no-param-reassign
+      obj[item.name] = item.value;
+      return obj;
+    }, {});
+    const structedObject = flatten.unflatten(flattenObject);
+
+    return new UserCollectableAttribute(identifier, _.get(structedObject, meta.basePropertyName));
+  }
+
   getFlattenValue(acumulator = [], sufix = null) {
     if (this.type === 'Object') {
       const definition = UserCollectableAttribute.getDefinition(this.identifier, this.version);

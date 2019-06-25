@@ -294,17 +294,17 @@ const definitions = [
     },
   },
   {
-    identifier: 'cvc:Type:idDocumentFront',
+    identifier: 'cvc:Evidences:idDocumentFront',
     version: '1',
     type: 'cvc:Type:evidence',
   },
   {
-    identifier: 'cvc:Type:idDocumentBack',
+    identifier: 'cvc:Evidences:idDocumentBack',
     version: '1',
     type: 'cvc:Type:evidence',
   },
   {
-    identifier: 'cvc:Type:selfie',
+    identifier: 'cvc:Evidences:selfie',
     version: '1',
     type: 'cvc:Type:evidence',
   },
@@ -314,17 +314,17 @@ const definitions = [
     type: {
       properties: [{
         name: 'idDocumentFront',
-        type: 'cvc:Type:idDocumentFront',
+        type: 'cvc:Evidences:idDocumentFront',
         deambiguify: true,
       },
       {
         name: 'idDocumentBack',
-        type: 'cvc:Type:idDocumentBack',
+        type: 'cvc:Evidences:idDocumentBack',
         deambiguify: true,
       },
       {
         name: 'selfie',
-        type: 'cvc:Type:selfie',
+        type: 'cvc:Evidences:selfie',
         deambiguify: true,
       }],
     },
