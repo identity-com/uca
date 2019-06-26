@@ -619,4 +619,142 @@ describe('UCA Constructions tests', () => {
     expect(ucaTemplate.basePropertyName).toEqual('verify.phoneNumberToken');
     expect(ucaTemplate.properties.length).toEqual(1);
   });
+
+  describe('Flatten UCAs tests', () => {
+    it('Should flatten a simple UCA', () => {
+      const ucaObject = new UCA('cvc:Document:number', 'a1b2c3-3c2b1a');
+      const flat = ucaObject.getFlattenValue();
+      expect(flat).toBeDefined();
+      expect(flat).toHaveLength(1);
+      const expected = [{ name: 'cvc:Document:number', value: 'a1b2c3-3c2b1a' }];
+      expect(flat).toEqual(expect.arrayContaining(expected));
+    });
+
+    it('Should flatten typedef UCA', () => {
+      const ucaObject = new UCA('cvc:Verify:emailToken', '12345');
+      const flat = ucaObject.getFlattenValue();
+      expect(flat).toBeDefined();
+      expect(flat).toHaveLength(1);
+      const expected = [{ name: 'cvc:Verify:emailToken', value: '12345' }];
+      expect(flat).toEqual(expect.arrayContaining(expected));
+    });
+
+    it('Should flatten structure UCA with 1 level', () => {
+      const ucaObject = new UCA('cvc:Type:Name', { givenNames: 'Joao', otherNames: 'Barbosa', familyNames: 'Santos' });
+      const flat = ucaObject.getFlattenValue();
+      expect(flat).toBeDefined();
+      expect(flat).toHaveLength(3);
+      const expected = [
+        { name: 'cvc:Name:givenNames', value: 'Joao' },
+        { name: 'cvc:Name:otherNames', value: 'Barbosa' },
+        { name: 'cvc:Name:familyNames', value: 'Santos' },
+      ];
+      expect(flat).toEqual(expect.arrayContaining(expected));
+    });
+
+    it('Should flatten structure UCA with 2 level', () => {
+      const ucaObject = new UCA('cvc:Type:email', { username: 'joao', domain: { name: 'civic', tld: 'com' } });
+      const flat = ucaObject.getFlattenValue();
+      expect(flat).toBeDefined();
+      expect(flat).toHaveLength(3);
+      const expected = [
+        { name: 'cvc:Email:username', value: 'joao' },
+        { name: 'cvc:Domain:name', value: 'civic' },
+        { name: 'cvc:Domain:tld', value: 'com' },
+      ];
+      expect(flat).toEqual(expect.arrayContaining(expected));
+    });
+
+    it('Should flatten structure UCA with 1 level and typedef', () => {
+      const ucaObject = new UCA('cvc:Identity:name',
+        { givenNames: 'Joao', otherNames: 'Barbosa', familyNames: 'Santos' });
+      const flat = ucaObject.getFlattenValue();
+      expect(flat).toBeDefined();
+      expect(flat).toHaveLength(3);
+      const expected = [
+        { name: 'cvc:Name:givenNames', value: 'Joao' },
+        { name: 'cvc:Name:otherNames', value: 'Barbosa' },
+        { name: 'cvc:Name:familyNames', value: 'Santos' }];
+      expect(flat).toEqual(expect.arrayContaining(expected));
+    });
+
+    it('Should flatten structure UCA with ambiguities', () => {
+      const ucaObject = new UCA('cvc:Validation:evidences', {
+        idDocumentFront: { algorithm: 'sha256', data: 'sha256(idDocumentFront)' },
+        idDocumentBack: { algorithm: 'sha256', data: 'sha256(idDocumentBack)' },
+        selfie: { algorithm: 'sha256', data: 'sha256(selfie)' },
+      });
+      const flat = ucaObject.getFlattenValue();
+      expect(flat).toBeDefined();
+      expect(flat).toHaveLength(6);
+      const was = [
+        { name: 'cvc:Hash:algorithm', value: 'sha256' },
+        { name: 'cvc:Hash:data', value: 'sha256(idDocumentFront)' },
+        { name: 'cvc:Hash:algorithm', value: 'sha256' },
+        { name: 'cvc:Hash:data', value: 'sha256(idDocumentBack)' },
+        { name: 'cvc:Hash:algorithm', value: 'sha256' },
+        { name: 'cvc:Hash:data', value: 'sha256(selfie)' },
+      ];
+
+      const expected = [
+        { name: 'cvc:Hash:algorithm>idDocumentFront', value: 'sha256' },
+        { name: 'cvc:Hash:data>idDocumentFront', value: 'sha256(idDocumentFront)' },
+        { name: 'cvc:Hash:algorithm>idDocumentBack', value: 'sha256' },
+        { name: 'cvc:Hash:data>idDocumentBack', value: 'sha256(idDocumentBack)' },
+        { name: 'cvc:Hash:algorithm>selfie', value: 'sha256' },
+        { name: 'cvc:Hash:data>selfie', value: 'sha256(selfie)' }];
+      expect(flat).toEqual(expect.arrayContaining(expected));
+      expect(flat).not.toEqual(expect.arrayContaining(was));
+    });
+
+    it('Should unflatten a simple UCA', () => {
+      const ucaObject = UCA.fromFlattenValue('cvc:Document:number',
+        [{ name: 'cvc:Document:number', value: 'a1b2c3-3c2b1a' }]);
+      expect(ucaObject).toBeDefined();
+      expect(ucaObject.identifier).toBe('cvc:Document:number');
+      expect(ucaObject.value).toBe('a1b2c3-3c2b1a');
+    });
+
+    it('Should unflatten a typedef UCA', () => {
+      const ucaObject = UCA.fromFlattenValue('cvc:Verify:emailToken',
+        [{ name: 'cvc:Verify:emailToken', value: '12345' }]);
+      expect(ucaObject).toBeDefined();
+      expect(ucaObject.identifier).toBe('cvc:Verify:emailToken');
+      expect(ucaObject.value).toBe('12345');
+    });
+
+    it('Should unflatten structure UCA with 1 level', () => {
+      const ucaObject = UCA.fromFlattenValue('cvc:Type:Name',
+        [
+          { name: 'cvc:Name:givenNames', value: 'Joao' },
+          { name: 'cvc:Name:otherNames', value: 'Barbosa' },
+          { name: 'cvc:Name:familyNames', value: 'Santos' }]);
+      expect(ucaObject).toBeDefined();
+      expect(ucaObject.identifier).toBe('cvc:Type:Name');
+    });
+
+    it('Should unflatten structure UCA with 2 level', () => {
+      const ucaObject = UCA.fromFlattenValue('cvc:Type:email',
+        [
+          { name: 'cvc:Email:username', value: 'joao' },
+          { name: 'cvc:Domain:name', value: 'civic' },
+          { name: 'cvc:Domain:tld', value: 'com' },
+        ]);
+      expect(ucaObject).toBeDefined();
+      expect(ucaObject.identifier).toBe('cvc:Type:email');
+    });
+
+    it('Should unflatten structure UCA with ambiguity', () => {
+      const ucaObject = UCA.fromFlattenValue('cvc:Validation:evidences',
+        [
+          { name: 'cvc:Hash:algorithm>idDocumentFront', value: 'sha256' },
+          { name: 'cvc:Hash:data>idDocumentFront', value: 'sha256(idDocumentFront)' },
+          { name: 'cvc:Hash:algorithm>idDocumentBack', value: 'sha256' },
+          { name: 'cvc:Hash:data>idDocumentBack', value: 'sha256(idDocumentBack)' },
+          { name: 'cvc:Hash:algorithm>selfie', value: 'sha256' },
+          { name: 'cvc:Hash:data>selfie', value: 'sha256(selfie)' }]);
+      expect(ucaObject).toBeDefined();
+      expect(ucaObject.identifier).toBe('cvc:Validation:evidences');
+    });
+  });
 });
