@@ -328,6 +328,7 @@ const definitions = [
         deambiguify: true,
       }],
     },
+    credentialItem: true,
   },
   {
     identifier: 'cvc:Identity:name',
