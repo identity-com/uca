@@ -334,6 +334,7 @@ const definitions = [
     identifier: 'cvc:Validation:evidences',
     version: '1',
     type: 'cvc:Document:evidences',
+    alias: true,
     credentialItem: true,
   },
   {
