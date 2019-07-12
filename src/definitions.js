@@ -309,7 +309,7 @@ const definitions = [
     type: 'cvc:Type:evidence',
   },
   {
-    identifier: 'cvc:Validation:evidences',
+    identifier: 'cvc:Document:evidences',
     version: '1',
     type: {
       properties: [{
@@ -328,6 +328,12 @@ const definitions = [
         deambiguify: true,
       }],
     },
+    credentialItem: true,
+  },
+  {
+    identifier: 'cvc:Validation:evidences',
+    version: '1',
+    type: 'cvc:Document:evidences',
     credentialItem: true,
   },
   {
