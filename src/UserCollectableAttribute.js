@@ -183,8 +183,10 @@ class UserCollectableAttribute {
   getFlattenValue(acumulator = [], sufix = null) {
     if (this.type === 'Object') {
       const definition = UserCollectableAttribute.getDefinition(this.identifier, this.version);
+      const resolvedType = resolveType(definition, this.definitions);
+
       _.each(_.keys(this.value), (key) => {
-        const deambiguify = _.get(_.find(definition.type.properties, { name: key }), 'deambiguify');
+        const deambiguify = _.get(_.find(resolvedType.properties, { name: key }), 'deambiguify');
         this.value[key].getFlattenValue(acumulator, deambiguify ? `>${key}` : sufix);
       });
     } else {

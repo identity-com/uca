@@ -679,6 +679,34 @@ describe('UCA Constructions tests', () => {
     });
 
     it('Should flatten structure UCA with ambiguities', () => {
+      const ucaObject = new UCA('cvc:Document:evidences', {
+        idDocumentFront: { algorithm: 'sha256', data: 'sha256(idDocumentFront)' },
+        idDocumentBack: { algorithm: 'sha256', data: 'sha256(idDocumentBack)' },
+        selfie: { algorithm: 'sha256', data: 'sha256(selfie)' },
+      });
+      const flat = ucaObject.getFlattenValue();
+      expect(flat).toBeDefined();
+      expect(flat).toHaveLength(6);
+      const was = [
+        { name: 'cvc:Hash:algorithm', value: 'sha256' },
+        { name: 'cvc:Hash:data', value: 'sha256(idDocumentFront)' },
+        { name: 'cvc:Hash:algorithm', value: 'sha256' },
+        { name: 'cvc:Hash:data', value: 'sha256(idDocumentBack)' },
+        { name: 'cvc:Hash:algorithm', value: 'sha256' },
+        { name: 'cvc:Hash:data', value: 'sha256(selfie)' },
+      ];
+      const expected = [
+        { name: 'cvc:Hash:algorithm>idDocumentFront', value: 'sha256' },
+        { name: 'cvc:Hash:data>idDocumentFront', value: 'sha256(idDocumentFront)' },
+        { name: 'cvc:Hash:algorithm>idDocumentBack', value: 'sha256' },
+        { name: 'cvc:Hash:data>idDocumentBack', value: 'sha256(idDocumentBack)' },
+        { name: 'cvc:Hash:algorithm>selfie', value: 'sha256' },
+        { name: 'cvc:Hash:data>selfie', value: 'sha256(selfie)' }];
+      expect(flat).toEqual(expect.arrayContaining(expected));
+      expect(flat).not.toEqual(expect.arrayContaining(was));
+    });
+
+    it('Should flatten an alias to a structure UCA with ambiguities', () => {
       const ucaObject = new UCA('cvc:Validation:evidences', {
         idDocumentFront: { algorithm: 'sha256', data: 'sha256(idDocumentFront)' },
         idDocumentBack: { algorithm: 'sha256', data: 'sha256(idDocumentBack)' },
@@ -695,7 +723,6 @@ describe('UCA Constructions tests', () => {
         { name: 'cvc:Hash:algorithm', value: 'sha256' },
         { name: 'cvc:Hash:data', value: 'sha256(selfie)' },
       ];
-
       const expected = [
         { name: 'cvc:Hash:algorithm>idDocumentFront', value: 'sha256' },
         { name: 'cvc:Hash:data>idDocumentFront', value: 'sha256(idDocumentFront)' },
@@ -745,6 +772,20 @@ describe('UCA Constructions tests', () => {
     });
 
     it('Should unflatten structure UCA with ambiguity', () => {
+      const ucaObject = UCA.fromFlattenValue('cvc:Document:evidences',
+        [
+          { name: 'cvc:Hash:algorithm>idDocumentFront', value: 'sha256' },
+          { name: 'cvc:Hash:data>idDocumentFront', value: 'sha256(idDocumentFront)' },
+          { name: 'cvc:Hash:algorithm>idDocumentBack', value: 'sha256' },
+          { name: 'cvc:Hash:data>idDocumentBack', value: 'sha256(idDocumentBack)' },
+          { name: 'cvc:Hash:algorithm>selfie', value: 'sha256' },
+          { name: 'cvc:Hash:data>selfie', value: 'sha256(selfie)' },
+        ]);
+      expect(ucaObject).toBeDefined();
+      expect(ucaObject.identifier).toBe('cvc:Document:evidences');
+    });
+
+    it('Should unflatten an alias for a structure UCA with ambiguity', () => {
       const ucaObject = UCA.fromFlattenValue('cvc:Validation:evidences',
         [
           { name: 'cvc:Hash:algorithm>idDocumentFront', value: 'sha256' },
@@ -752,7 +793,8 @@ describe('UCA Constructions tests', () => {
           { name: 'cvc:Hash:algorithm>idDocumentBack', value: 'sha256' },
           { name: 'cvc:Hash:data>idDocumentBack', value: 'sha256(idDocumentBack)' },
           { name: 'cvc:Hash:algorithm>selfie', value: 'sha256' },
-          { name: 'cvc:Hash:data>selfie', value: 'sha256(selfie)' }]);
+          { name: 'cvc:Hash:data>selfie', value: 'sha256(selfie)' },
+        ]);
       expect(ucaObject).toBeDefined();
       expect(ucaObject.identifier).toBe('cvc:Validation:evidences');
     });
