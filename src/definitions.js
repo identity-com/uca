@@ -797,6 +797,56 @@ const definitions = [
     pattern: /^\d{4}$/,
     credentialItem: true,
   },
+  {
+    identifier: 'cvc:Knowledge:question',
+    description: 'A question or questionId for an answer',
+    version: '1',
+    type: 'String',
+    credentialItem: false,
+  },
+  {
+    identifier: 'cvc:Knowledge:answer',
+    description: 'An answer or answerId for an question',
+    version: '1',
+    type: 'String',
+    credentialItem: false,
+  },
+  {
+    identifier: 'cvc:Type:knowledge',
+    version: '1',
+    type: {
+      properties: [
+        {
+          name: 'question',
+          type: 'cvc:Knowledge:question',
+        },
+        {
+          name: 'answer',
+          type: 'cvc:Knowledge:answer',
+        },
+      ],
+      required: ['question', 'answer'],
+    },
+    credentialItem: false,
+  },
+  {
+    identifier: 'cvc:Kba:PrimaryKnowledge',
+    version: '1',
+    type: 'cvc:Type:knowledge',
+    credentialItem: false,
+  },
+  {
+    identifier: 'cvc:Kba:ConfirmationKnowledge',
+    version: '1',
+    type: 'cvc:Type:knowledge',
+    credentialItem: false,
+  },
+  {
+    identifier: 'cvc:Kba:RequiredKnowledge',
+    version: '1',
+    type: 'cvc:Type:knowledge',
+    credentialItem: false,
+  },
 ];
 
 module.exports = definitions;
