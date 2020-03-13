@@ -491,6 +491,76 @@ describe('UCA Constructions tests', () => {
       .toThrowError(`${JSON.stringify('abcde')} is not valid for ${identifier}`);
   });
 
+  test('Should construct cvc:Kba:PrimaryKnowledge', () => {
+    const identifier = 'cvc:Kba:PrimaryKnowledge';
+    const question = 'What is the answer to life, the universe and everything';
+    const answer = '42';
+
+    const knowledge = new UCA(identifier, {
+      question,
+      answer,
+    });
+
+    const plain = knowledge.getPlainValue();
+    expect(plain.question).toBe(question);
+    expect(plain.answer).toBe(answer);
+  });
+
+  test('Should construct cvc:Kba:ConfirmationKnowledge', () => {
+    const identifier = 'cvc:Kba:ConfirmationKnowledge';
+    const question = 'What is the answer to life, the universe and everything';
+    const answer = '42';
+
+    const knowledge = new UCA(identifier, {
+      question,
+      answer,
+    });
+
+    const plain = knowledge.getPlainValue();
+    expect(plain.question).toBe(question);
+    expect(plain.answer).toBe(answer);
+  });
+
+  test('Should construct cvc:Kba:RequiredKnowledge', () => {
+    const identifier = 'cvc:Kba:RequiredKnowledge';
+    const question = 'What is the answer to life, the universe and everything';
+    const answer = '42';
+
+    const knowledge = new UCA(identifier, {
+      question,
+      answer,
+    });
+
+    const plain = knowledge.getPlainValue();
+    expect(plain.question).toBe(question);
+    expect(plain.answer).toBe(answer);
+  });
+
+  test('Should fail to construct cvc:Kba:PrimaryKnowledge', () => {
+    const identifier = 'cvc:Kba:PrimaryKnowledge';
+    const question = 'What is the answer to life, the universe and everything';
+
+    expect(() => new UCA(identifier, {
+      question,
+    })).toThrow();
+  });
+
+  test('Should fail to construct cvc:Kba:ConfirmationKnowledge', () => {
+    const identifier = 'cvc:Kba:ConfirmationKnowledge';
+    const answer = '42';
+
+    expect(() => new UCA(identifier, {
+      answer,
+    })).toThrow();
+  });
+
+  test('Should fail to construct cvc:Kba:RequiredKnowledge', () => {
+    const identifier = 'cvc:Kba:RequiredKnowledge';
+
+    expect(() => new UCA(identifier, {
+    })).toThrow();
+  });
+
   test('Check credentialItem attribute', () => {
     const uca = new UCA('cvc:Name:givenNames', 'Yan');
     expect(uca.credentialItem).toBeTruthy();
