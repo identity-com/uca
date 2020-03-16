@@ -830,19 +830,7 @@ const definitions = [
     credentialItem: false,
   },
   {
-    identifier: 'cvc:Kba:PrimaryKnowledge',
-    version: '1',
-    type: 'cvc:Type:knowledge',
-    credentialItem: false,
-  },
-  {
-    identifier: 'cvc:Kba:ConfirmationKnowledge',
-    version: '1',
-    type: 'cvc:Type:knowledge',
-    credentialItem: false,
-  },
-  {
-    identifier: 'cvc:Kba:RequiredKnowledge',
+    identifier: 'cvc:Kba:Knowledge',
     version: '1',
     type: 'cvc:Type:knowledge',
     credentialItem: false,
