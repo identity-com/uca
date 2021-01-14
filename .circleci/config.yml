@@ -3,11 +3,11 @@ version: 2
 defaults: &defaults
   working_directory: ~/repo
   docker:
-    - image: circleci/node:8.11
+    - image: circleci/node:14.15
 
 workflows:
   version: 2
-  
+
   build-and-test:
     jobs:
       - build
@@ -45,7 +45,7 @@ workflows:
               only: /^v\d+\.\d+\.\d+.*/
             branches:
               ignore: /.*/
-      
+
 jobs:
   build:
     <<: *defaults
