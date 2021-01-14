@@ -24,13 +24,11 @@ describe('Utils tests', () => {
     let r = getObjectBasePropName(definitions, typeDefinition);
     expect(r).toEqual('contact.email');
 
-
     identifier = 'cvc:Email:domain';
     typeDefinition = getTypeDefinition(definitions, identifier);
 
     r = getObjectBasePropName(definitions, typeDefinition);
     expect(r).toEqual('email.domain');
-
 
     identifier = 'cvc:Email:domain';
     typeDefinition = getTypeDefinition(definitions, identifier);
@@ -40,7 +38,6 @@ describe('Utils tests', () => {
 
     r = getObjectBasePropName(definitions, typeDefinition, 'contact');
     expect(r).toEqual('contact.email.domain');
-
 
     identifier = 'cvc:Email:username';
     typeDefinition = getTypeDefinition(definitions, identifier);

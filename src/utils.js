@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const getValidIdentifiers = definitions => _.map(definitions, d => d.identifier);
+const getValidIdentifiers = (definitions) => _.map(definitions, (d) => d.identifier);
 
 /**
  * extract the expected Type name for the value when constructing an UCA
@@ -76,7 +76,7 @@ const getObjectBasePropName = (definitions, typeDefinition, pathName) => {
 };
 
 const flagRequeredProps = (requiredArray, props) => (
-  _.map(props, p => _.merge(p, { required: _.includes(requiredArray, p.name) }))
+  _.map(props, (p) => _.merge(p, { required: _.includes(requiredArray, p.name) }))
 );
 
 const getObjectTypeDefProps = (definitions, typeDefinition) => {
