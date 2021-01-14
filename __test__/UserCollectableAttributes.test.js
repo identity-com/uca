@@ -586,7 +586,6 @@ describe('UCA Constructions tests', () => {
     expect(ucaTemplate.properties[0].meta.version).toEqual('1');
   });
 
-
   test('Get template for complex uca 3', () => {
     const ucaTemplate = UCA.getUCAProps('cvc:Identity:address', '1');
     expect(ucaTemplate).toBeDefined();
