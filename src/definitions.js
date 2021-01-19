@@ -971,11 +971,14 @@ const definitions = [
           type: 'cvc:Type.organization',
         },
         {
-          name: 'code',
-          type: 'cvc:Type.MedicalCode',
+          name: 'codes',
+          type: 'Array',
+          items: {
+            type: 'claim-cvc:Type.medicalCode-v1',
+          },
         },
       ],
-      required: ['patient', 'dateOfAdministration', 'name', 'organisation', 'code'],
+      required: ['patient', 'dateOfAdministration', 'name', 'organisation', 'codes'],
     },
     credentialItem: true,
   },
