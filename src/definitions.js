@@ -835,6 +835,159 @@ const definitions = [
     type: 'cvc:Type:knowledge',
     credentialItem: false,
   },
+  {
+    identifier: 'cvc:Type.dateOfAdministration',
+    version: '1',
+    type: 'cvc:Type:date',
+    credentialItem: true,
+  },
+  {
+    identifier: 'cvc:Type.vaccinationName',
+    version: '1',
+    type: 'String',
+    credentialItem: true,
+  },
+  {
+    identifier: 'cvc:Type.vaccinationRecordDetail',
+    version: '1',
+    type: {
+      properties: [
+        {
+          name: 'createdAt',
+          type: 'cvc:Type:date',
+        },
+        {
+          name: 'updatedAt',
+          type: 'cvc:Type:date',
+        },
+      ],
+    },
+    required: ['createdAt'],
+    credentialItem: true,
+  },
+  {
+    identifier: 'cvc:Type.organisation',
+    version: '1',
+    type: {
+      properties: [
+        {
+          name: 'name',
+          type: 'String',
+        },
+      ],
+    },
+    required: ['name'],
+    credentialItem: true,
+  },
+  {
+    identifier: 'cvc:Type.Patient',
+    version: '1',
+    type: {
+      properties: [
+        {
+          name: 'name',
+          type: 'cvc:Type.Name',
+        },
+        {
+          name: 'dateOfBirth',
+          type: 'cvc:Identity.dateOfBirth',
+        },
+      ],
+    },
+    required: ['name'],
+    credentialItem: true,
+  },
+  {
+    identifier: 'cvc:Type.MedicalCode',
+    version: '1',
+    type: {
+      properties: [
+        {
+          name: 'name',
+          type: 'String',
+        },
+        {
+          name: 'code',
+          type: 'String',
+        },
+        {
+          name: 'codeSystem',
+          type: 'String',
+        },
+        {
+          name: 'codeSystemName',
+          type: 'String',
+        },
+      ],
+    },
+    required: ['name', 'code'],
+    credentialItem: true,
+  },
+  {
+    identifier: 'cvc:Type.manufacturer',
+    version: '1',
+    type: {
+      properties: [
+        {
+          name: 'name',
+          type: 'String',
+        },
+        {
+          name: 'code',
+          type: 'cvc:Type.MedicalCode',
+        },
+      ],
+      required: ['name'],
+    },
+    credentialItem: true,
+  },
+  {
+    identifier: 'cvc:Type.VaccinationRecord',
+    version: '1',
+    type: {
+      properties: [
+        {
+          name: 'patient',
+          type: 'cvc:Type.Patient',
+        },
+        {
+          name: 'dateOfAdministration',
+          type: 'cvc:Type.dateOfAdministration',
+        },
+        {
+          name: 'manufacturer',
+          type: 'cvc:Type.manufacturer',
+        },
+        {
+          name: 'name',
+          type: 'cvc:Type.vaccinationName',
+        },
+        {
+          name: 'detail',
+          type: 'cvc:Type.vaccinationRecordDetail',
+        },
+        {
+          name: 'organisation',
+          type: 'cvc:Type.organization',
+        },
+        {
+          name: 'code',
+          type: 'cvc:Type.MedicalCode',
+        },
+      ],
+      required: ['patient', 'dateOfAdministration', 'name', 'organisation', 'code'],
+    },
+    credentialItem: true,
+  },
+  {
+    identifier: 'cvc:Vaccination',
+    version: '1',
+    type: 'Array',
+    items: {
+      type: 'cvc:Type.VaccinationRecord',
+    },
+    credentialItem: true,
+  },
 ];
 
 module.exports = definitions;
