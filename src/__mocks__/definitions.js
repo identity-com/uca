@@ -667,6 +667,15 @@ const definitions = [
     credentialItem: true,
   },
   {
+    identifier: 'cvc:Collection.objects',
+    version: '1',
+    type: 'Array',
+    items: {
+      type: 'cvc:Document:dateOfBirth',
+    },
+    credentialItem: true,
+  },
+  {
     identifier: 'cvc:Uca:withCollection',
     version: '1',
     attestable: true,

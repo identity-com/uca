@@ -117,14 +117,9 @@ class UserCollectableAttribute {
   initializeValuesWithArrayItems(identifier, values, version) {
     const definition = UserCollectableAttribute.getDefinition(identifier, version, this.definitions);
 
-    const ucaArray = [];
-
     if (!_.isArray(values)) throw new Error(`Value for ${identifier}-${version} should be an array`);
 
-    _.forEach(values, (value) => {
-      const uca = new UserCollectableAttribute(_.get(definition, 'items.type'), value);
-      ucaArray.push(uca);
-    });
+    const ucaArray = _.map(values, (value) => new UserCollectableAttribute(_.get(definition, 'items.type'), value));
 
     this.value = ucaArray;
   }

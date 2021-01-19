@@ -83,6 +83,17 @@ describe('UCA Constructions tests', () => {
     expect(uca).toBeDefined();
     expect(uca.getPlainValue()).toBeDefined();
   });
+  test('Should construct UCA with array of objects', () => {
+    const identifier = 'cvc:Collection.objects';
+    const value = [
+      { day: 20, month: 3, year: 1978 },
+      { day: 20, month: 5, year: 1978 },
+      { day: 20, month: 7, year: 1978 },
+    ];
+    const uca = new UCA(identifier, value);
+    expect(uca).toBeDefined();
+    expect(uca.getPlainValue()).toBeDefined();
+  });
 
   test('Should apply constraints when constructing UCA from another UCA type', () => {
     const identifier = 'cvc:Verify:phoneNumberToken';
