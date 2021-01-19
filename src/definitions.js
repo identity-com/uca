@@ -1000,6 +1000,21 @@ const definitions = [
     },
     credentialItem: true,
   },
+  {
+    identifier: 'cvc:Type.ExternalServiceAuth',
+    type: {
+      properties: [
+        {
+          name: 'connect',
+          type: 'Boolean',
+        },
+        {
+          name: 'token',
+          type: 'String',
+        },
+      ],
+    },
+  },
 ];
 
 module.exports = definitions;
