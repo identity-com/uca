@@ -880,7 +880,7 @@ const definitions = [
     credentialItem: true,
   },
   {
-    identifier: 'cvc:Type.Patient',
+    identifier: 'cvc:Type.patient',
     version: '1',
     type: {
       properties: [
@@ -898,7 +898,7 @@ const definitions = [
     credentialItem: true,
   },
   {
-    identifier: 'cvc:Type.MedicalCode',
+    identifier: 'cvc:Type.medicalCode',
     version: '1',
     type: {
       properties: [
@@ -934,7 +934,7 @@ const definitions = [
         },
         {
           name: 'code',
-          type: 'cvc:Type.MedicalCode',
+          type: 'cvc:Type.medicalCode',
         },
       ],
       required: ['name'],
@@ -942,7 +942,7 @@ const definitions = [
     credentialItem: true,
   },
   {
-    identifier: 'cvc:Type.VaccinationRecord',
+    identifier: 'cvc:Type.vaccinationRecord',
     version: '1',
     type: {
       properties: [
@@ -980,7 +980,7 @@ const definitions = [
     credentialItem: true,
   },
   {
-    identifier: 'cvc:Vaccination-v1',
+    identifier: 'cvc:vaccination-v1',
     version: '1',
     type: {
       properties: [
@@ -988,7 +988,7 @@ const definitions = [
           name: 'records',
           type: 'Array',
           items: {
-            type: 'cvc:Type.VaccinationRecord-v1',
+            type: 'cvc:Type.vaccinationRecord-v1',
           },
         },
         {
@@ -1001,7 +1001,7 @@ const definitions = [
     credentialItem: true,
   },
   {
-    identifier: 'cvc:Type.ExternalServiceAuth',
+    identifier: 'cvc:Type.externalServiceAuth',
     type: {
       properties: [
         {
