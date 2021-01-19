@@ -942,6 +942,11 @@ const definitions = [
     credentialItem: true,
   },
   {
+    identifier: 'cvc:userConfirmation-v1',
+    credentialItem: false,
+    type: 'Boolean',
+  },
+  {
     identifier: 'cvc:Type.vaccinationRecord',
     version: '1',
     type: {
@@ -998,25 +1003,14 @@ const definitions = [
           name: 'name',
           type: 'cvc:Type.vaccinationName-v1',
         },
+        {
+          name: 'userConfirmation',
+          type: 'cvc:userConfirmation-v1',
+        },
       ],
-      required: ['name', 'records'],
+      required: ['name', 'records', 'userConfirmation'],
     },
     credentialItem: true,
-  },
-  {
-    identifier: 'cvc:Type.externalServiceToken',
-    type: {
-      properties: [
-        {
-          name: 'name',
-          type: 'String',
-        },
-        {
-          name: 'value',
-          type: 'String',
-        },
-      ],
-    },
   },
   {
     identifier: 'cvc:Type.externalServiceAuth',
@@ -1025,10 +1019,6 @@ const definitions = [
         {
           name: 'connect',
           type: 'Boolean',
-        },
-        {
-          name: 'token',
-          type: 'cvc:Type.externalServiceToken',
         },
       ],
     },
