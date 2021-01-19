@@ -90,7 +90,9 @@ class UserCollectableAttribute {
     const originalDefinition = _.clone(definition);
     definition.type = resolveType(definition, this.definitions);
 
-    if (isAttestableValue(value)) {
+    if (this.type === 'Array') {
+      this.initializeValuesWithArrayItems(identifier, value, version);
+    } else if (isAttestableValue(value)) {
       this.value = value;
       this.initializeAttestableValue();
     } else if (isValueOfType(value, this.type)) {
@@ -110,6 +112,16 @@ class UserCollectableAttribute {
     this.credentialItem = definition.credentialItem;
     this.id = `${this.version}:${this.identifier}:${uuidv4()}`;
     return this;
+  }
+
+  initializeValuesWithArrayItems(identifier, values, version) {
+    const definition = UserCollectableAttribute.getDefinition(identifier, version, this.definitions);
+
+    if (!_.isArray(values)) throw new Error(`Value for ${identifier}-${version} should be an array`);
+
+    const ucaArray = _.map(values, (value) => new UserCollectableAttribute(_.get(definition, 'items.type'), value));
+
+    this.value = ucaArray;
   }
 
   initializeValuesWithProperties(identifier, definition, value) {
@@ -200,6 +212,16 @@ class UserCollectableAttribute {
           return this.value;
         }
         return newParent;
+      case 'Array':
+        _.forEach(this.value, (item) => {
+          result.push(item.getPlainValue());
+        });
+        if (propName) {
+          newParent[propName] = result;
+          return newParent;
+        }
+        return result;
+
       default:
         _.forEach(_.sortBy(_.keys(this.value)), (k) => {
           result.push(this.value[k].getPlainValue(k));
