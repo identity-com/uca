@@ -980,11 +980,23 @@ const definitions = [
     credentialItem: true,
   },
   {
-    identifier: 'cvc:Vaccination',
+    identifier: 'cvc:Vaccination-v1',
     version: '1',
-    type: 'Array',
-    items: {
-      type: 'cvc:Type.VaccinationRecord',
+    type: {
+      properties: [
+        {
+          name: 'records',
+          type: 'Array',
+          items: {
+            type: 'cvc:Type.VaccinationRecord-v1',
+          },
+        },
+        {
+          name: 'name',
+          type: 'cvc:Type.vaccinationName-v1',
+        },
+      ],
+      required: ['name', 'records'],
     },
     credentialItem: true,
   },
