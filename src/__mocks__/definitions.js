@@ -657,6 +657,15 @@ const definitions = [
     type: 'String',
     credentialItem: true,
   },
+  {
+    identifier: 'cvc:Collection.records',
+    version: '1',
+    type: 'Array',
+    items: {
+      type: 'cvc:Document:placeOfBirth',
+    },
+    credentialItem: true,
+  },
 ];
 
 module.exports = definitions;

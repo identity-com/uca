@@ -58,6 +58,17 @@ describe('UCA Constructions tests', () => {
     expect(uca).toBeDefined();
   });
 
+  test('Should construct UCA with array', () => {
+    const identifier = 'cvc:Collection.records';
+    const value = [
+      'Belo Horizonte',
+      'Brazil',
+      'Minas Gerais',
+    ];
+    const uca = new UCA(identifier, value);
+    expect(uca).toBeDefined();
+  });
+
   test('Should apply constraints when constructing UCA from another UCA type', () => {
     const identifier = 'cvc:Verify:phoneNumberToken';
     const value = 'incorrect-format-token';

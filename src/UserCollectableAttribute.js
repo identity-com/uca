@@ -14,7 +14,7 @@ const {
 } = require('./utils');
 const { UCATemplateValue } = require('./UCATemplateValue');
 
-const isAttestableValue = (value) => (value && value.attestableValue);
+const isAttestableValue = value => (value && value.attestableValue);
 
 const handleNotFoundDefinition = (myDefinitions, identifier, version) => {
   if (version != null) {
@@ -90,7 +90,9 @@ class UserCollectableAttribute {
     const originalDefinition = _.clone(definition);
     definition.type = resolveType(definition, this.definitions);
 
-    if (isAttestableValue(value)) {
+    if (this.type === 'Array') {
+      this.initializeValuesWithArrayItems(identifier, value, version);
+    } else if (isAttestableValue(value)) {
       this.value = value;
       this.initializeAttestableValue();
     } else if (isValueOfType(value, this.type)) {
@@ -110,6 +112,21 @@ class UserCollectableAttribute {
     this.credentialItem = definition.credentialItem;
     this.id = `${this.version}:${this.identifier}:${uuidv4()}`;
     return this;
+  }
+
+  initializeValuesWithArrayItems(identifier, values, version) {
+    const definition = UserCollectableAttribute.getDefinition(identifier, version, this.definitions);
+
+    const ucaArray = [];
+
+    if (!_.isArray(values)) throw new Error(`Value for ${identifier}-${version} should be an array`);
+
+    _.forEach(values, (value) => {
+      const uca = new UserCollectableAttribute(_.get(definition, 'items.type'), value);
+      ucaArray.push(uca);
+    });
+
+    this.value = ucaArray;
   }
 
   initializeValuesWithProperties(identifier, definition, value) {
@@ -148,7 +165,7 @@ class UserCollectableAttribute {
       const name = nameComponents[0];
       const sufix = nameComponents[1];
       const property = _.find(meta.properties,
-        (o) => o.name === name && (!sufix || _.includes(o.meta.propertyName, sufix)));
+        o => o.name === name && (!sufix || _.includes(o.meta.propertyName, sufix)));
 
       if (_.get(property, 'meta.type') === 'Number') {
         fixedValue.value = _.toNumber(item.value);
@@ -200,6 +217,16 @@ class UserCollectableAttribute {
           return this.value;
         }
         return newParent;
+      case 'Array':
+        _.forEach(this.value, (item) => {
+          result.push(item.getPlainValue());
+        });
+        if (propName) {
+          newParent[propName] = result;
+          return newParent;
+        }
+        return result;
+
       default:
         _.forEach(_.sortBy(_.keys(this.value)), (k) => {
           result.push(this.value[k].getPlainValue(k));
@@ -233,7 +260,7 @@ class UserCollectableAttribute {
           const typeSuffix = _.split(prop.type, ':')[2];
           const newBasePropName = prop.name === typeSuffix ? basePropName : `${basePropName}.${prop.name}`;
           const proProperties = UserCollectableAttribute.getAllProperties(prop.type, newBasePropName);
-          _.forEach(proProperties, (p) => properties.push(p));
+          _.forEach(proProperties, p => properties.push(p));
         });
       }
     } else if (pathName) {
@@ -326,7 +353,7 @@ function convertIdentifierToClassName(identifier) {
 
 function mixinIdentifiers(UCA) {
   // Extend UCA Semantic
-  _.forEach(_.filter(definitions, (d) => d.credentialItem), (def) => {
+  _.forEach(_.filter(definitions, d => d.credentialItem), (def) => {
     const name = convertIdentifierToClassName(def.identifier);
     const source = {};
     const { identifier } = def;
