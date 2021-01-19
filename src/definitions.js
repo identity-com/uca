@@ -1001,6 +1001,21 @@ const definitions = [
     credentialItem: true,
   },
   {
+    identifier: 'cvc:Type.externalServiceToken',
+    type: {
+      properties: [
+        {
+          name: 'name',
+          type: 'String',
+        },
+        {
+          name: 'value',
+          type: 'String',
+        },
+      ],
+    },
+  },
+  {
     identifier: 'cvc:Type.externalServiceAuth',
     type: {
       properties: [
@@ -1010,7 +1025,7 @@ const definitions = [
         },
         {
           name: 'token',
-          type: 'String',
+          type: 'cvc:Type.externalServiceToken',
         },
       ],
     },
