@@ -942,7 +942,7 @@ const definitions = [
     credentialItem: true,
   },
   {
-    identifier: 'cvc:userConfirmation-v1',
+    identifier: 'cvc:userConfirmation',
     credentialItem: false,
     type: 'Boolean',
   },
