@@ -666,6 +666,20 @@ const definitions = [
     },
     credentialItem: true,
   },
+  {
+    identifier: 'cvc:Uca:withCollection',
+    version: '1',
+    attestable: true,
+    type: {
+      properties: [
+        {
+          name: 'collection',
+          type: 'cvc:Collection.records',
+        },
+      ],
+      required: ['collection'],
+    },
+  },
 ];
 
 module.exports = definitions;

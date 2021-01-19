@@ -67,6 +67,21 @@ describe('UCA Constructions tests', () => {
     ];
     const uca = new UCA(identifier, value);
     expect(uca).toBeDefined();
+    expect(uca.getPlainValue()).toBeDefined();
+  });
+
+  test('Should construct UCA with a property of type array', () => {
+    const identifier = 'cvc:Uca:withCollection';
+    const value = {
+      collection: [
+        'Belo Horizonte',
+        'Brazil',
+        'Minas Gerais',
+      ],
+    };
+    const uca = new UCA(identifier, value);
+    expect(uca).toBeDefined();
+    expect(uca.getPlainValue()).toBeDefined();
   });
 
   test('Should apply constraints when constructing UCA from another UCA type', () => {
