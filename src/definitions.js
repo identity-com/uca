@@ -836,19 +836,19 @@ const definitions = [
     credentialItem: false,
   },
   {
-    identifier: 'cvc:Type.dateOfAdministration',
+    identifier: 'cvc:Medical.Vaccination.dateOfAdministration',
     version: '1',
     type: 'cvc:Type:date',
     credentialItem: true,
   },
   {
-    identifier: 'cvc:Type.vaccinationName',
+    identifier: 'cvc:Medical.Vaccination.name',
     version: '1',
     type: 'String',
     credentialItem: true,
   },
   {
-    identifier: 'cvc:Type.vaccinationRecordDetail',
+    identifier: 'cvc:Medical.Vaccination.recordDetail',
     version: '1',
     type: {
       properties: [
@@ -866,7 +866,7 @@ const definitions = [
     credentialItem: true,
   },
   {
-    identifier: 'cvc:Type.organisation',
+    identifier: 'cvc:Medical.organisation',
     version: '1',
     type: {
       properties: [
@@ -880,7 +880,7 @@ const definitions = [
     credentialItem: true,
   },
   {
-    identifier: 'cvc:Type.patient',
+    identifier: 'cvc:Medical.patient',
     version: '1',
     type: {
       properties: [
@@ -898,7 +898,7 @@ const definitions = [
     credentialItem: true,
   },
   {
-    identifier: 'cvc:Type.medicalCode',
+    identifier: 'cvc:Medical.code',
     version: '1',
     type: {
       properties: [
@@ -924,7 +924,7 @@ const definitions = [
     credentialItem: true,
   },
   {
-    identifier: 'cvc:Type.manufacturer',
+    identifier: 'cvc:Medical.Vaccine.manufacturer',
     version: '1',
     type: {
       properties: [
@@ -934,7 +934,7 @@ const definitions = [
         },
         {
           name: 'code',
-          type: 'cvc:Type.medicalCode',
+          type: 'cvc:Medical.code',
         },
       ],
       required: ['name'],
@@ -942,73 +942,39 @@ const definitions = [
     credentialItem: true,
   },
   {
-    identifier: 'cvc:userConfirmation',
-    credentialItem: false,
-    type: 'Boolean',
-  },
-  {
-    identifier: 'cvc:Type.vaccinationRecord',
+    identifier: 'cvc:Medical.Vaccination.record',
     version: '1',
     type: {
       properties: [
         {
-          name: 'patient',
-          type: 'cvc:Type.Patient',
-        },
-        {
           name: 'dateOfAdministration',
-          type: 'cvc:Type.dateOfAdministration',
+          type: 'cvc:Medical.Vaccine.dateOfAdministration',
         },
         {
           name: 'manufacturer',
-          type: 'cvc:Type.manufacturer',
+          type: 'cvc:Medical.Vaccine.manufacturer',
         },
         {
           name: 'name',
-          type: 'cvc:Type.vaccinationName',
+          type: 'cvc:Medical.Vaccine.name',
         },
         {
           name: 'detail',
-          type: 'cvc:Type.vaccinationRecordDetail',
+          type: 'cvc:Medical.Vaccination.recordDetail',
         },
         {
           name: 'organisation',
-          type: 'cvc:Type.organization',
+          type: 'cvc:Medical.organization',
         },
         {
           name: 'codes',
           type: 'Array',
           items: {
-            type: 'claim-cvc:Type.medicalCode-v1',
+            type: 'cvc:Medical.code',
           },
         },
       ],
-      required: ['patient', 'dateOfAdministration', 'name', 'organisation', 'codes'],
-    },
-    credentialItem: true,
-  },
-  {
-    identifier: 'cvc:vaccination-v1',
-    version: '1',
-    type: {
-      properties: [
-        {
-          name: 'records',
-          type: 'Array',
-          items: {
-            type: 'cvc:Type.vaccinationRecord-v1',
-          },
-        },
-        {
-          name: 'name',
-          type: 'cvc:Type.vaccinationName-v1',
-        },
-        {
-          name: 'userConfirmation',
-          type: 'cvc:userConfirmation-v1',
-        },
-      ],
-      required: ['name', 'records', 'userConfirmation'],
+      required: ['dateOfAdministration', 'name', 'organisation'],
     },
     credentialItem: true,
   },
@@ -1017,11 +983,133 @@ const definitions = [
     type: {
       properties: [
         {
-          name: 'connect',
-          type: 'Boolean',
+          name: 'hasConnected',
+          type: 'String',
         },
       ],
     },
+  },
+  {
+    identifier: 'cvc:Medical.vaccination',
+    version: '1',
+    type: {
+      properties: [
+        {
+          name: 'records',
+          type: 'Array',
+          items: {
+            type: 'cvc:Medical.Vaccination.record',
+          },
+        },
+        {
+          name: 'name',
+          type: 'cvc:Medical.Vaccination.name',
+        },
+        {
+          name: 'patient',
+          type: 'cvc:Medical.patient',
+        },
+        {
+          name: 'externalServiceAuth',
+          type: 'cvc:Type.externalServiceAuth',
+        },
+      ],
+    },
+    required: ['records', 'name', 'patient', 'externalServiceAuth'],
+    credentialItem: true,
+  },
+  {
+    identifier: 'cvc:Medical.Test.date',
+    version: '1',
+    type: 'cvc:Type:date',
+    credentialItem: true,
+  },
+  {
+    identifier: 'cvc:Medical.Test.type',
+    version: '1',
+    type: 'String',
+    credentialItem: true,
+  },
+  {
+    identifier: 'cvc:Medical.Test.result',
+    version: '1',
+    type: 'String',
+    credentialItem: true,
+  },
+  {
+    identifier: 'cvc:Medical.Test.record',
+    version: '1',
+    type: {
+      properties: [
+        {
+          name: 'date',
+          type: 'cvc:Medical.Test.date',
+        },
+        {
+          name: 'type',
+          type: 'cvc:Medical.Test.type',
+        },
+        {
+          name: 'result',
+          type: 'cvc:Medical.Test.result',
+        },
+        {
+          name: 'codes',
+          type: 'Array',
+          items: {
+            type: 'cvc:Medical.code',
+          },
+        },
+      ],
+      required: ['date', 'type', 'result'],
+    },
+    credentialItem: true,
+  },
+  {
+    identifier: 'cvc:Medical.Test',
+    version: '1',
+    type: {
+      properties: [
+        {
+          name: 'records',
+          type: 'Array',
+          items: {
+            type: 'cvc:Medical.Test.record',
+          },
+        },
+        {
+          name: 'name',
+          type: 'cvc:Medical.Test.name',
+        },
+        {
+          name: 'patient',
+          type: 'cvc:Medical.patient',
+        },
+        {
+          name: 'externalServiceAuth',
+          type: 'cvc:Type.externalServiceAuth',
+        },
+      ],
+    },
+    required: ['records', 'name', 'patient', 'externalServiceAuth'],
+    credentialItem: true,
+  },
+  {
+    identifier: 'cvc:Medical.covid19',
+    version: '1',
+    type: {
+      properties: [
+        {
+          name: 'vaccination',
+          type: 'cvc:Medical.vaccination',
+        },
+        {
+          name: 'test',
+          type: 'cvc:Medical.test',
+        },
+      ],
+    },
+    credentialItem: true,
   },
 ];
 
