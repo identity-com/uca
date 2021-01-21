@@ -978,10 +978,7 @@ const definitions = [
         },
         {
           name: 'codes',
-          type: 'Array',
-          items: {
-            type: 'cvc:Medical:code',
-          },
+          type: 'cvc:Medical:codes',
         },
       ],
       required: ['dateOfAdministration', 'name', 'organisation'],
@@ -989,12 +986,17 @@ const definitions = [
     credentialItem: true,
   },
   {
+    identifier: 'cvc:Type:hasConnected',
+    type: 'Boolean',
+    credentialItem: false,
+  },
+  {
     identifier: 'cvc:Type:externalServiceAuth',
     type: {
       properties: [
         {
           name: 'hasConnected',
-          type: 'String',
+          type: 'cvc:Type:hasConnected',
         },
       ],
     },
@@ -1016,6 +1018,15 @@ const definitions = [
     identifier: 'cvc:Test:result',
     version: '1',
     type: 'String',
+    credentialItem: true,
+  },
+  {
+    identifier: 'cvc:Medical:codes',
+    version: '1',
+    type: 'Array',
+    items: {
+      type: 'cvc:Medical:code',
+    },
     credentialItem: true,
   },
   {
@@ -1041,10 +1052,7 @@ const definitions = [
         },
         {
           name: 'codes',
-          type: 'Array',
-          items: {
-            type: 'cvc:Medical:code',
-          },
+          type: 'cvc:Medical:codes',
         },
       ],
       required: ['date', 'type', 'result'],
@@ -1057,23 +1065,35 @@ const definitions = [
     type: 'Boolean',
   },
   {
+    identifier: 'cvc:Vaccination:records',
+    version: '1',
+    type: 'Array', // the client uses this to know to display the UCA list
+    items: {
+      type: 'cvc:Vaccination:record', // complex data type defined in UCA
+    },
+    credentialItem: true,
+  },
+  {
+    identifier: 'cvc:Test:records',
+    version: '1',
+    type: 'Array', // the client uses this to know to display the UCA list
+    items: {
+      type: 'cvc:Test:record', // complex data type defined in UCA
+    },
+    credentialItem: true,
+  },
+  {
     identifier: 'cvc:Type:covid19',
     version: '1',
     type: {
       properties: [
         {
           name: 'vaccinations',
-          type: 'Array', // the client uses this to know to display the UCA list
-          items: {
-            type: 'cvc:Vaccination:record', // complex data type defined in UCA
-          },
+          type: 'cvc:Vaccination:records',
         },
         {
           name: 'tests', // used so the client knows how to display this
-          type: 'Array', // the client uses this to know to display the UCA list
-          items: {
-            type: 'cvc:Test:record', // complex data type defined in UCA
-          },
+          type: 'cvc:Test:records', // the client uses this to know to display the UCA list
         },
         {
           name: 'patient',
