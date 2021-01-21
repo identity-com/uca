@@ -1055,7 +1055,7 @@ const definitions = [
           type: 'cvc:Medical:codes',
         },
       ],
-      required: ['date', 'type', 'result'],
+      required: ['testDate', 'type'],
     },
     credentialItem: true,
   },
