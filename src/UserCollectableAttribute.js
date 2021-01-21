@@ -181,22 +181,27 @@ class UserCollectableAttribute {
     return new UserCollectableAttribute(identifier, _.get(structedObject, meta.basePropertyName));
   }
 
-  getFlattenValue(acumulator = [], sufix = null) {
+  getFlattenValue(accumulator = [], suffix = null, prefix = null) {
     if (this.type === 'Object') {
       const definition = UserCollectableAttribute.getDefinition(this.identifier, this.version);
       const resolvedType = resolveType(definition, this.definitions);
 
       _.each(_.keys(this.value), (key) => {
         const deambiguify = _.get(_.find(resolvedType.properties, { name: key }), 'deambiguify');
-        this.value[key].getFlattenValue(acumulator, deambiguify ? `>${key}` : sufix);
+        this.value[key].getFlattenValue(accumulator, deambiguify ? `>${key}` : suffix, prefix);
+      });
+    } else if (this.type === 'Array') {
+      const parentIdentifier = `${this.identifier}`;
+      _.each(this.value, (item, index) => {
+        item.getFlattenValue(accumulator, suffix, `${parentIdentifier}.${index}.`);
       });
     } else {
-      acumulator.push({
-        name: sufix ? this.identifier + sufix : this.identifier,
+      accumulator.push({
+        name: `${prefix || ''}${this.identifier}${suffix || ''}`,
         value: _.toString(this.value),
       });
     }
-    return acumulator;
+    return accumulator;
   }
 
   getPlainValue(propName) {
