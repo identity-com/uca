@@ -994,7 +994,7 @@ const definitions = [
       properties: [
         {
           name: 'hasConnected',
-          type: 'String',
+          type: 'Boolean',
         },
       ],
     },
