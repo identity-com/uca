@@ -1099,12 +1099,7 @@ const definitions = [
           name: 'test',
           type: 'cvc:test',
         },
-        {
-          name: 'externalServiceAuth',
-          type: 'cvc:Type.externalServiceAuth',
-        },
       ],
-      require: ['externalServiceAuth'],
     },
     credentialItem: true,
   },
