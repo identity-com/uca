@@ -846,19 +846,19 @@ const definitions = [
     credentialItem: false,
   },
   {
-    identifier: 'cvc:Vaccination:date',
+    identifier: 'cvc:Vaccination.date',
     version: '1',
     type: 'cvc:Type:timestamp',
     credentialItem: true,
   },
   {
-    identifier: 'cvc:Vaccination:name',
+    identifier: 'cvc:Vaccination.name',
     version: '1',
     type: 'String',
     credentialItem: true,
   },
   {
-    identifier: 'cvc:Vaccination:recordDetail',
+    identifier: 'cvc:Vaccination.recordDetail',
     version: '1',
     type: {
       properties: [
@@ -876,7 +876,7 @@ const definitions = [
     credentialItem: true,
   },
   {
-    identifier: 'cvc:Type:organisation',
+    identifier: 'cvc:Type.organisation',
     version: '1',
     type: {
       properties: [
@@ -890,17 +890,17 @@ const definitions = [
     credentialItem: true,
   },
   {
-    identifier: 'cvc:Type:patient',
+    identifier: 'cvc:Type.patient',
     version: '1',
     type: {
       properties: [
         {
           name: 'name',
-          type: 'cvc:Type:simpleName',
+          type: 'cvc:Type.simpleName',
         },
         {
           name: 'dateOfBirth',
-          type: 'cvc:Identity:dateOfBirth',
+          type: 'cvc:Identity.dateOfBirth',
         },
       ],
     },
@@ -908,7 +908,7 @@ const definitions = [
     credentialItem: true,
   },
   {
-    identifier: 'cvc:Medical:code',
+    identifier: 'cvc:Medical.code',
     version: '1',
     type: {
       properties: [
@@ -934,7 +934,7 @@ const definitions = [
     credentialItem: true,
   },
   {
-    identifier: 'cvc:Vaccination:manufacturer',
+    identifier: 'cvc:Vaccination.manufacturer',
     version: '1',
     type: {
       properties: [
@@ -944,7 +944,7 @@ const definitions = [
         },
         {
           name: 'code',
-          type: 'cvc:Medical:code',
+          type: 'cvc:Medical.code',
         },
       ],
       required: ['name'],
@@ -952,35 +952,35 @@ const definitions = [
     credentialItem: true,
   },
   {
-    identifier: 'cvc:Vaccination:record',
+    identifier: 'cvc:Vaccination.record',
     version: '1',
     type: {
       properties: [
         {
           name: 'dateOfAdministration',
-          type: 'cvc:Vaccination:date',
+          type: 'cvc:Vaccination.date',
         },
         {
           name: 'manufacturer',
-          type: 'cvc:Vaccination:manufacturer',
+          type: 'cvc:Vaccination.manufacturer',
         },
         {
           name: 'name',
-          type: 'cvc:Vaccination:name',
+          type: 'cvc:Vaccination.name',
         },
         {
           name: 'detail',
-          type: 'cvc:Vaccination:recordDetail',
+          type: 'cvc:Vaccination.recordDetail',
         },
         {
           name: 'organisation',
-          type: 'cvc:Type:organization',
+          type: 'cvc:Type.organization',
         },
         {
           name: 'codes',
           type: 'Array',
           items: {
-            type: 'cvc:Medical:code',
+            type: 'cvc:Medical.code',
           },
         },
       ],
@@ -989,60 +989,61 @@ const definitions = [
     credentialItem: true,
   },
   {
-    identifier: 'cvc:Type:externalServiceAuth',
+    identifier: 'cvc:Type.externalServiceAuth',
     type: {
       properties: [
         {
           name: 'hasConnected',
-          type: 'Boolean',
+          type: 'String',
         },
       ],
     },
+    credentialItem: true,
   },
   {
-    identifier: 'cvc:Test:date',
+    identifier: 'cvc:Test.date',
     version: '1',
     type: 'cvc:Type:timestamp',
     credentialItem: true,
   },
   {
-    identifier: 'cvc:Test:type',
+    identifier: 'cvc:Test.type',
     version: '1',
     type: 'String',
     credentialItem: true,
   },
   {
-    identifier: 'cvc:Test:result',
+    identifier: 'cvc:Test.result',
     version: '1',
     type: 'String',
     credentialItem: true,
   },
   {
-    identifier: 'cvc:Test:record',
+    identifier: 'cvc:Test.record',
     version: '1',
     type: {
       properties: [
         {
           name: 'testDate',
-          type: 'cvc:Test:date',
+          type: 'cvc:Test.date',
         },
         {
           name: 'resultDate',
-          type: 'cvc:Test:date',
+          type: 'cvc:Test.date',
         },
         {
           name: 'type',
-          type: 'cvc:Test:type',
+          type: 'cvc:Test.type',
         },
         {
           name: 'result',
-          type: 'cvc:Test:result',
+          type: 'cvc:Test.result',
         },
         {
           name: 'codes',
           type: 'Array',
           items: {
-            type: 'cvc:Medical:code',
+            type: 'cvc:Medical.code',
           },
         },
       ],
@@ -1051,12 +1052,12 @@ const definitions = [
     credentialItem: true,
   },
   {
-    identifier: 'cvc:Type:userConfirm',
+    identifier: 'cvc:Type.userConfirm',
     version: '1',
     type: 'Boolean',
   },
   {
-    identifier: 'cvc:Type:covid19',
+    identifier: 'cvc:Type.covid19',
     version: '1',
     type: {
       properties: [
@@ -1064,19 +1065,19 @@ const definitions = [
           name: 'vaccinations',
           type: 'Array', // the client uses this to know to display the UCA list
           items: {
-            type: 'cvc:Vaccination:record', // complex data type defined in UCA
+            type: 'cvc:Vaccination.record', // complex data type defined in UCA
           },
         },
         {
           name: 'tests', // used so the client knows how to display this
           type: 'Array', // the client uses this to know to display the UCA list
           items: {
-            type: 'cvc:Test:record', // complex data type defined in UCA
+            type: 'cvc:Test.record', // complex data type defined in UCA
           },
         },
         {
           name: 'patient',
-          type: 'cvc:Type:patient',
+          type: 'cvc:Type.patient',
         },
       ],
     },
