@@ -572,6 +572,11 @@ const definitions = [
     type: 'String',
   },
   {
+    identifier: 'cvc:Type:timestamp',
+    version: '1',
+    type: 'String',
+  },
+  {
     identifier: 'cvc:Type:ImageBase64',
     version: '1',
     type: 'String',
@@ -838,7 +843,7 @@ const definitions = [
   {
     identifier: 'cvc:Vaccination.date',
     version: '1',
-    type: 'cvc:Type:date',
+    type: 'cvc:Type:timestamp',
     credentialItem: true,
   },
   {
@@ -1017,7 +1022,7 @@ const definitions = [
   {
     identifier: 'cvc:Test.date',
     version: '1',
-    type: 'cvc:Type:date',
+    type: 'cvc:Type:timestamp',
     credentialItem: true,
   },
   {
