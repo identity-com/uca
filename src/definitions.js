@@ -1063,6 +1063,7 @@ const definitions = [
     identifier: 'cvc:Type:userConfirm',
     version: '1',
     type: 'Boolean',
+    credentialItem: true,
   },
   {
     identifier: 'cvc:Vaccination:records',
