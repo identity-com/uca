@@ -577,6 +577,11 @@ const definitions = [
     type: 'String',
   },
   {
+    identifier: 'cvc:Type:simpleName',
+    version: '1',
+    type: 'String',
+  },
+  {
     identifier: 'cvc:Type:ImageBase64',
     version: '1',
     type: 'String',
@@ -891,7 +896,7 @@ const definitions = [
       properties: [
         {
           name: 'name',
-          type: 'cvc:Type.Name',
+          type: 'cvc:Type.simpleName',
         },
         {
           name: 'dateOfBirth',
