@@ -876,7 +876,7 @@ const definitions = [
     credentialItem: true,
   },
   {
-    identifier: 'cvc:Type:organisationNane',
+    identifier: 'cvc:Type:organisationName',
     type: 'String',
   },
   {
@@ -886,7 +886,7 @@ const definitions = [
       properties: [
         {
           name: 'name',
-          type: 'cvc:Type:organisationNane',
+          type: 'cvc:Type:organisationName',
         },
       ],
     },
