@@ -577,7 +577,7 @@ const definitions = [
     type: 'String',
   },
   {
-    identifier: 'cvc:Type:simpleName',
+    identifier: 'cvc:Type:fullName',
     version: '1',
     type: 'String',
   },
@@ -876,13 +876,17 @@ const definitions = [
     credentialItem: true,
   },
   {
+    identifier: 'cvc:Type:organisationName',
+    type: 'String',
+  },
+  {
     identifier: 'cvc:Type:organisation',
     version: '1',
     type: {
       properties: [
         {
           name: 'name',
-          type: 'String',
+          type: 'cvc:Type:organisationName',
         },
       ],
     },
@@ -896,7 +900,7 @@ const definitions = [
       properties: [
         {
           name: 'name',
-          type: 'cvc:Type:simpleName',
+          type: 'cvc:Type:fullName',
         },
         {
           name: 'dateOfBirth',
@@ -908,25 +912,49 @@ const definitions = [
     credentialItem: true,
   },
   {
+    identifier: 'cvc:Code:codeSystemName',
+    version: '1',
+    type: 'String',
+    credentialItem: true,
+  },
+  {
+    identifier: 'cvc:Code:name',
+    version: '1',
+    type: 'String',
+    credentialItem: true,
+  },
+  {
+    identifier: 'cvc:Code:code',
+    version: '1',
+    type: 'String',
+    credentialItem: true,
+  },
+  {
+    identifier: 'cvc:Code:codeSystem',
+    version: '1',
+    type: 'String',
+    credentialItem: true,
+  },
+  {
     identifier: 'cvc:Medical:code',
     version: '1',
     type: {
       properties: [
         {
           name: 'name',
-          type: 'String',
+          type: 'cvc:Code:name',
         },
         {
           name: 'code',
-          type: 'String',
+          type: 'cvc:Code:code',
         },
         {
           name: 'codeSystem',
-          type: 'String',
+          type: 'cvc:Code:codeSystem',
         },
         {
           name: 'codeSystemName',
-          type: 'String',
+          type: 'cvc:Code:codeSystemName',
         },
       ],
     },
