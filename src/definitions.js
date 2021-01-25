@@ -1112,7 +1112,7 @@ const definitions = [
     credentialItem: true,
   },
   {
-    identifier: 'cvc:Type:covid19',
+    identifier: 'cvc:Medical:covid19',
     version: '1',
     type: {
       properties: [
