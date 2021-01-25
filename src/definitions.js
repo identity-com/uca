@@ -714,6 +714,7 @@ const definitions = [
     type: 'String',
     enum: {
       UK_BIOMETRIC_RESIDENCE_PERMIT: 'uk_biometric_residence_permit',
+      BIOMETRIC_RESIDENCE_PERMIT: 'biometric_residence_permit',
       DRIVING_LICENSE: 'driving_license',
       NATIONAL_IDENTITY_CARD: 'national_identity_card',
       PASSPORT: 'passport',
