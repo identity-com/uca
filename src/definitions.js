@@ -910,7 +910,7 @@ const definitions = [
     type: {
       properties: [
         {
-          name: 'name',
+          name: 'fullName',
           type: 'cvc:Type:fullName',
         },
         {
@@ -973,13 +973,19 @@ const definitions = [
     credentialItem: false,
   },
   {
+    identifier: 'cvc:Manufacturer:name',
+    version: '1',
+    type: 'String',
+    credentialItem: false,
+  },
+  {
     identifier: 'cvc:Vaccination:manufacturer',
     version: '1',
     type: {
       properties: [
         {
           name: 'name',
-          type: 'String',
+          type: 'cvc:Manufacturer:name',
         },
         {
           name: 'code',
