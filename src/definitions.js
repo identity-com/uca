@@ -876,17 +876,17 @@ const definitions = [
     credentialItem: true,
   },
   {
-    identifier: 'cvc:Type:organisationName',
+    identifier: 'cvc:Type:organizationName',
     type: 'String',
   },
   {
-    identifier: 'cvc:Type:organisation',
+    identifier: 'cvc:Type:organization',
     version: '1',
     type: {
       properties: [
         {
           name: 'name',
-          type: 'cvc:Type:organisationName',
+          type: 'cvc:Type:organizationName',
         },
       ],
     },
@@ -1011,7 +1011,7 @@ const definitions = [
           type: 'cvc:Vaccination:recordDetail',
         },
         {
-          name: 'organisation',
+          name: 'organization',
           type: 'cvc:Type:organization',
         },
         {
@@ -1019,7 +1019,7 @@ const definitions = [
           type: 'cvc:Medical:codes',
         },
       ],
-      required: ['vaccinationId', 'dateOfAdministration', 'name', 'organisation'],
+      required: ['vaccinationId', 'dateOfAdministration', 'name', 'organization'],
     },
     credentialItem: true,
   },
@@ -1099,7 +1099,7 @@ const definitions = [
           type: 'cvc:Test:result',
         },
         {
-          name: 'organisation',
+          name: 'organization',
           type: 'cvc:Type:organization',
         },
         {
