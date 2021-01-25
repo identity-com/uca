@@ -81,6 +81,21 @@ describe('UCA Constructions tests', () => {
     expect(createUCA).toThrow();
   });
 
+  test('UCA dont construct invalid identifier', () => {
+    const identifier = 'cvc:Not:exist';
+    const value = {
+      day: 20,
+      month: 3,
+      year: -1,
+    };
+
+    function createUCA() {
+      return new UCA(identifier, value);
+    }
+
+    expect(createUCA).toThrow();
+  });
+
   test('Should throw error when constructing UCA with a value not in the enum definition', () => {
     const identifier = 'cvc:Document:type';
     const value = 'invalid-document-type';
@@ -644,6 +659,70 @@ describe('UCA Constructions tests', () => {
   });
 
   describe('Flatten UCAs tests', () => {
+    it('Handle Arrays in flatten/Unflatten  UCA', () => {
+      const identifier = 'cvc:Test:records';
+      const value = [
+        {
+          testDate: '150000',
+          testId: 'cccc',
+          type: 'ccc',
+        },
+      ];
+      const ucaObject = new UCA(identifier, value);
+      const flat = ucaObject.getFlattenValue();
+      expect(flat).toBeDefined();
+      expect(flat).toHaveLength(3);
+      const expected = [
+        {
+          name: 'cvc:Test:records.0.cvc:Test:date',
+          value: '150000',
+        },
+        {
+          name: 'cvc:Test:records.0.cvc:Test:id',
+          value: 'cccc',
+        },
+        {
+          name: 'cvc:Test:records.0.cvc:Test:type',
+          value: 'ccc',
+        },
+      ];
+      expect(flat).toEqual(expect.arrayContaining(expected));
+
+    });
+
+    it('Handle Numbers in flatten/Unflatten  UCA', () => {
+      const identifier = 'cvc:Identity:dateOfBirth';
+      const value = {
+        day: 20,
+        month: 3,
+        year: 1978,
+      };
+      const ucaObject = new UCA(identifier, value);
+      const flat = ucaObject.getFlattenValue();
+      expect(flat).toBeDefined();
+      expect(flat).toHaveLength(3);
+      const expected = [
+        {
+          name: 'cvc:Type:day',
+          value: '20',
+        },
+        {
+          name: 'cvc:Type:month',
+          value: '3',
+        },
+        {
+          name: 'cvc:Type:year',
+          value: '1978',
+        },
+      ];
+      expect(flat).toEqual(expect.arrayContaining(expected));
+
+      const newUcaObject = UCA.fromFlattenValue(identifier, flat);
+      expect(newUcaObject.value.day.value).toEqual(20);
+      expect(newUcaObject.value.month.value).toEqual(3);
+      expect(newUcaObject.value.year.value).toEqual(1978);
+    });
+
     it('Should flatten a simple UCA', () => {
       const ucaObject = new UCA('cvc:Document:number', 'a1b2c3-3c2b1a');
       const flat = ucaObject.getFlattenValue();
