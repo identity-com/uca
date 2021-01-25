@@ -980,7 +980,7 @@ const definitions = [
     credentialItem: true,
   },
   {
-    identifier: 'cvc:Vaccination.id',
+    identifier: 'cvc:Vaccination:id',
     version: '1',
     type: 'String',
     credentialItem: true,
@@ -1068,7 +1068,7 @@ const definitions = [
     credentialItem: true,
   },
   {
-    identifier: 'cvc:Test.id',
+    identifier: 'cvc:Test:id',
     version: '1',
     type: 'String',
     credentialItem: true,
