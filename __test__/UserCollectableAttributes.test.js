@@ -687,7 +687,6 @@ describe('UCA Constructions tests', () => {
         },
       ];
       expect(flat).toEqual(expect.arrayContaining(expected));
-
     });
 
     it('Handle Numbers in flatten/Unflatten  UCA', () => {
