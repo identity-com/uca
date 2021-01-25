@@ -849,13 +849,13 @@ const definitions = [
     identifier: 'cvc:Vaccination:date',
     version: '1',
     type: 'cvc:Type:timestamp',
-    credentialItem: true,
+    credentialItem: false,
   },
   {
     identifier: 'cvc:Vaccination:name',
     version: '1',
     type: 'String',
-    credentialItem: true,
+    credentialItem: false,
   },
   {
     identifier: 'cvc:Vaccination:recordDetail',
@@ -873,7 +873,7 @@ const definitions = [
       ],
     },
     required: ['createdAt'],
-    credentialItem: true,
+    credentialItem: false,
   },
   {
     identifier: 'cvc:Type:organizationName',
@@ -901,7 +901,7 @@ const definitions = [
       ],
     },
     required: ['name'],
-    credentialItem: true,
+    credentialItem: false,
   },
   {
     identifier: 'cvc:Type:patient',
@@ -919,31 +919,31 @@ const definitions = [
       ],
     },
     required: ['name'],
-    credentialItem: true,
+    credentialItem: false,
   },
   {
     identifier: 'cvc:Code:codeSystemName',
     version: '1',
     type: 'String',
-    credentialItem: true,
+    credentialItem: false,
   },
   {
     identifier: 'cvc:Code:name',
     version: '1',
     type: 'String',
-    credentialItem: true,
+    credentialItem: false,
   },
   {
     identifier: 'cvc:Code:code',
     version: '1',
     type: 'String',
-    credentialItem: true,
+    credentialItem: false,
   },
   {
     identifier: 'cvc:Code:codeSystem',
     version: '1',
     type: 'String',
-    credentialItem: true,
+    credentialItem: false,
   },
   {
     identifier: 'cvc:Medical:code',
@@ -969,7 +969,7 @@ const definitions = [
       ],
     },
     required: ['name', 'code'],
-    credentialItem: true,
+    credentialItem: false,
   },
   {
     identifier: 'cvc:Vaccination:manufacturer',
@@ -987,7 +987,7 @@ const definitions = [
       ],
       required: ['name'],
     },
-    credentialItem: true,
+    credentialItem: false,
   },
   {
     identifier: 'cvc:Vaccination:id',
@@ -1048,25 +1048,25 @@ const definitions = [
         },
       ],
     },
-    credentialItem: true,
+    credentialItem: false,
   },
   {
     identifier: 'cvc:Test:date',
     version: '1',
     type: 'cvc:Type:timestamp',
-    credentialItem: true,
+    credentialItem: false,
   },
   {
     identifier: 'cvc:Test:type',
     version: '1',
     type: 'String',
-    credentialItem: true,
+    credentialItem: false,
   },
   {
     identifier: 'cvc:Test:result',
     version: '1',
     type: 'String',
-    credentialItem: true,
+    credentialItem: false,
   },
   {
     identifier: 'cvc:Medical:codes',
@@ -1075,7 +1075,7 @@ const definitions = [
     items: {
       type: 'cvc:Medical:code',
     },
-    credentialItem: true,
+    credentialItem: false,
   },
   {
     identifier: 'cvc:Test:id',
