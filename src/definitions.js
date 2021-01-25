@@ -878,6 +878,12 @@ const definitions = [
   {
     identifier: 'cvc:Type:organizationName',
     type: 'String',
+    credentialItem: true,
+  },
+  {
+    identifier: 'cvc:Type:organizationId',
+    type: 'String',
+    credentialItem: true,
   },
   {
     identifier: 'cvc:Type:organization',
@@ -887,6 +893,10 @@ const definitions = [
         {
           name: 'name',
           type: 'cvc:Type:organizationName',
+        },
+        {
+          name: 'id',
+          type: 'cvc:Type:organizationId',
         },
       ],
     },
