@@ -876,17 +876,27 @@ const definitions = [
     credentialItem: false,
   },
   {
-    identifier: 'cvc:Type:organisationName',
+    identifier: 'cvc:Type:organizationName',
     type: 'String',
+    credentialItem: true,
   },
   {
-    identifier: 'cvc:Type:organisation',
+    identifier: 'cvc:Type:organizationId',
+    type: 'String',
+    credentialItem: true,
+  },
+  {
+    identifier: 'cvc:Type:organization',
     version: '1',
     type: {
       properties: [
         {
           name: 'name',
-          type: 'cvc:Type:organisationName',
+          type: 'cvc:Type:organizationName',
+        },
+        {
+          name: 'id',
+          type: 'cvc:Type:organizationId',
         },
       ],
     },
@@ -980,10 +990,20 @@ const definitions = [
     credentialItem: false,
   },
   {
+    identifier: 'cvc:Vaccination:id',
+    version: '1',
+    type: 'String',
+    credentialItem: true,
+  },
+  {
     identifier: 'cvc:Vaccination:record',
     version: '1',
     type: {
       properties: [
+        {
+          name: 'vaccinationId',
+          type: 'cvc:Vaccination:id',
+        },
         {
           name: 'dateOfAdministration',
           type: 'cvc:Vaccination:date',
@@ -1001,7 +1021,7 @@ const definitions = [
           type: 'cvc:Vaccination:recordDetail',
         },
         {
-          name: 'organisation',
+          name: 'organization',
           type: 'cvc:Type:organization',
         },
         {
@@ -1009,7 +1029,7 @@ const definitions = [
           type: 'cvc:Medical:codes',
         },
       ],
-      required: ['dateOfAdministration', 'name', 'organisation'],
+      required: ['vaccinationId', 'dateOfAdministration', 'name', 'organization'],
     },
     credentialItem: true,
   },
@@ -1058,10 +1078,20 @@ const definitions = [
     credentialItem: false,
   },
   {
+    identifier: 'cvc:Test:id',
+    version: '1',
+    type: 'String',
+    credentialItem: true,
+  },
+  {
     identifier: 'cvc:Test:record',
     version: '1',
     type: {
       properties: [
+        {
+          name: 'testId',
+          type: 'cvc:Test:id',
+        },
         {
           name: 'testDate',
           type: 'cvc:Test:date',
@@ -1079,11 +1109,15 @@ const definitions = [
           type: 'cvc:Test:result',
         },
         {
+          name: 'organization',
+          type: 'cvc:Type:organization',
+        },
+        {
           name: 'codes',
           type: 'cvc:Medical:codes',
         },
       ],
-      required: ['testDate', 'type'],
+      required: ['testDate', 'testId', 'type'],
     },
     credentialItem: true,
   },
