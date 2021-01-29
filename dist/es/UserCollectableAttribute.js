@@ -10,10 +10,10 @@ const {
   resolveDefinition,
   getTypeDefinition,
   getObjectBasePropName,
-  getObjectTypeDefProps,
+  getObjectTypeDefProps
 } = require('./utils');
 
-const isAttestableValue = value => (value && value.attestableValue);
+const isAttestableValue = value => value && value.attestableValue;
 
 const handleNotFoundDefinition = (myDefinitions, identifier, version) => {
   if (version != null) {
@@ -33,7 +33,7 @@ class UCATemplateValue {
       required,
       propertyName,
       type,
-      version,
+      version
     };
   }
 }
@@ -51,11 +51,13 @@ const getUCATemplateProperties = (identifier, required, version, pathName) => {
     const typeDefProps = getObjectTypeDefProps(definitions, typeDefinition);
     const basePropName = getObjectBasePropName(definitions, typeDefinition, pathName);
 
-    _.forEach(typeDefProps, (prop) => {
+    _.forEach(typeDefProps, prop => {
       const typeSuffix = _.split(prop.type, ':')[2];
       const newBasePropName = prop.name === typeSuffix ? basePropName : `${basePropName}.${prop.name}`;
       const proProperties = getUCATemplateProperties(prop.type, prop.required, version, newBasePropName);
-      _.forEach(proProperties, (p) => { properties.push(p); });
+      _.forEach(proProperties, p => {
+        properties.push(p);
+      });
     });
   } else if (pathName) {
     const propertyName = `${pathName}.${_.split(definition.identifier, ':')[2]}`;
@@ -154,9 +156,7 @@ class UserCollectableAttribute {
 
   static getDefinition(identifier, version, customDefinitions) {
     const definitionsList = customDefinitions || definitions;
-    const definition = version
-      ? _.find(definitionsList, { identifier, version })
-      : _.find(definitionsList, { identifier });
+    const definition = version ? _.find(definitionsList, { identifier, version }) : _.find(definitionsList, { identifier });
     if (!definition) {
       return handleNotFoundDefinition(definitionsList, identifier, version);
     }
@@ -165,13 +165,12 @@ class UserCollectableAttribute {
 
   static fromFlattenValue(identifier, values) {
     const meta = UserCollectableAttribute.getUCAProps(identifier);
-    const fixedValues = _.map(values, (item) => {
+    const fixedValues = _.map(values, item => {
       const fixedValue = _.cloneDeep(item);
       const nameComponents = _.split(item.name, '>');
       const name = nameComponents[0];
       const sufix = nameComponents[1];
-      const property = _.find(meta.properties,
-        o => o.name === name && (!sufix || _.includes(o.meta.propertyName, sufix)));
+      const property = _.find(meta.properties, o => o.name === name && (!sufix || _.includes(o.meta.propertyName, sufix)));
 
       if (_.get(property, 'meta.type') === 'Number') {
         fixedValue.value = _.toNumber(item.value);
@@ -197,7 +196,7 @@ class UserCollectableAttribute {
       const definition = UserCollectableAttribute.getDefinition(this.identifier, this.version);
       const resolvedType = resolveType(definition, this.definitions);
 
-      _.each(_.keys(this.value), (key) => {
+      _.each(_.keys(this.value), key => {
         const deambiguify = _.get(_.find(resolvedType.properties, { name: key }), 'deambiguify');
         this.value[key].getFlattenValue(accumulator, deambiguify ? `>${key}` : suffix, prefix);
       });
@@ -209,7 +208,7 @@ class UserCollectableAttribute {
     } else {
       accumulator.push({
         name: `${prefix || ''}${this.identifier}${suffix || ''}`,
-        value: _.toString(this.value),
+        value: _.toString(this.value)
       });
     }
     return accumulator;
@@ -229,7 +228,7 @@ class UserCollectableAttribute {
         }
         return newParent;
       case 'Array':
-        _.forEach(this.value, (item) => {
+        _.forEach(this.value, item => {
           result.push(item.getPlainValue());
         });
         if (propName) {
@@ -239,10 +238,10 @@ class UserCollectableAttribute {
         return result;
 
       default:
-        _.forEach(_.sortBy(_.keys(this.value)), (k) => {
+        _.forEach(_.sortBy(_.keys(this.value)), k => {
           result.push(this.value[k].getPlainValue(k));
         });
-        _.forEach(result, (properties) => {
+        _.forEach(result, properties => {
           if (propName) {
             newParent[propName] = newParent[propName] ? newParent[propName] : {};
             _.assign(newParent[propName], properties);
@@ -267,7 +266,7 @@ class UserCollectableAttribute {
         // Properties is not an object
         properties.push(`${basePropName}.${typeDefProps.name}`);
       } else {
-        _.forEach(typeDefProps, (prop) => {
+        _.forEach(typeDefProps, prop => {
           const typeSuffix = _.split(prop.type, ':')[2];
           const newBasePropName = prop.name === typeSuffix ? basePropName : `${basePropName}.${prop.name}`;
           const proProperties = UserCollectableAttribute.getAllProperties(prop.type, newBasePropName);
@@ -295,7 +294,7 @@ class UserCollectableAttribute {
       name: identifier,
       version: definition.version,
       basePropertyName: '',
-      properties: [],
+      properties: []
     };
 
     const typeDefinition = getTypeDefinition(definitions, identifier);
@@ -320,7 +319,7 @@ class UserCollectableAttribute {
     const ucaProps = UserCollectableAttribute.getUCAProps(identifier, ucaVersion);
 
     const flattenProps = {};
-    _.each(ucaProps.properties, (p) => {
+    _.each(ucaProps.properties, p => {
       const fProp = _.find(props, { name: p.name });
       if (fProp) {
         flattenProps[p.meta.propertyName] = fProp.value;
@@ -336,17 +335,9 @@ class UserCollectableAttribute {
   static isValid(value, type, definition) {
     switch (type) {
       case 'String':
-        return (definition.pattern ? definition.pattern.test(value) : true)
-          && (definition.minimumLength ? value.length >= definition.minimumLength : true)
-          && (definition.maximumLength ? value.length <= definition.minimumLength : true)
-          && (definition.enum ? _.indexOf(_.values(definition.enum), value) >= 0 : true);
+        return (definition.pattern ? definition.pattern.test(value) : true) && (definition.minimumLength ? value.length >= definition.minimumLength : true) && (definition.maximumLength ? value.length <= definition.minimumLength : true) && (definition.enum ? _.indexOf(_.values(definition.enum), value) >= 0 : true);
       case 'Number':
-        return ((!_.isNil(definition.minimum)
-          && definition.exclusiveMinimum ? value > definition.minimum : value >= definition.minimum)
-          || _.isNil(definition.minimum))
-          && ((!_.isNil(definition.maximum)
-            && definition.exclusiveMaximum ? value < definition.maximum : value <= definition.maximum)
-            || _.isNil(definition.maximum));
+        return ((!_.isNil(definition.minimum) && definition.exclusiveMinimum ? value > definition.minimum : value >= definition.minimum) || _.isNil(definition.minimum)) && ((!_.isNil(definition.maximum) && definition.exclusiveMaximum ? value < definition.maximum : value <= definition.maximum) || _.isNil(definition.maximum));
       case 'Boolean':
         return _.isBoolean(value);
       default:
@@ -364,7 +355,7 @@ function convertIdentifierToClassName(identifier) {
 
 function mixinIdentifiers(UCA) {
   // Extend UCA Semantic
-  _.forEach(_.filter(definitions, d => d.credentialItem), (def) => {
+  _.forEach(_.filter(definitions, d => d.credentialItem), def => {
     const name = convertIdentifierToClassName(def.identifier);
     const source = {};
     const { identifier } = def;
