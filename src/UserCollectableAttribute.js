@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const timestamp = require('unix-timestamp');
-const { v4: uuidv4 } = require('uuid');
+const uuidv4 = require('uuid/v4');
 const flatten = require('flat');
 const definitions = require('./definitions');
 const {
@@ -12,9 +12,8 @@ const {
   getObjectBasePropName,
   getObjectTypeDefProps,
 } = require('./utils');
-const { UCATemplateValue } = require('./UCATemplateValue');
 
-const isAttestableValue = (value) => (value && value.attestableValue);
+const isAttestableValue = value => (value && value.attestableValue);
 
 const handleNotFoundDefinition = (myDefinitions, identifier, version) => {
   if (version != null) {
@@ -26,6 +25,18 @@ const handleNotFoundDefinition = (myDefinitions, identifier, version) => {
 
   throw new Error(`${identifier} is not defined`);
 };
+
+class UCATemplateValue {
+  constructor(identifier, type, propertyName, required, version) {
+    this.name = identifier;
+    this.meta = {
+      required,
+      propertyName,
+      type,
+      version,
+    };
+  }
+}
 
 const getUCATemplateProperties = (identifier, required, version, pathName) => {
   const definition = version ? _.find(definitions, { identifier, version }) : _.find(definitions, { identifier });
@@ -160,7 +171,7 @@ class UserCollectableAttribute {
       const name = nameComponents[0];
       const sufix = nameComponents[1];
       const property = _.find(meta.properties,
-        (o) => o.name === name && (!sufix || _.includes(o.meta.propertyName, sufix)));
+        o => o.name === name && (!sufix || _.includes(o.meta.propertyName, sufix)));
 
       if (_.get(property, 'meta.type') === 'Number') {
         fixedValue.value = _.toNumber(item.value);
@@ -260,7 +271,7 @@ class UserCollectableAttribute {
           const typeSuffix = _.split(prop.type, ':')[2];
           const newBasePropName = prop.name === typeSuffix ? basePropName : `${basePropName}.${prop.name}`;
           const proProperties = UserCollectableAttribute.getAllProperties(prop.type, newBasePropName);
-          _.forEach(proProperties, (p) => properties.push(p));
+          _.forEach(proProperties, p => properties.push(p));
         });
       }
     } else if (pathName) {
@@ -353,7 +364,7 @@ function convertIdentifierToClassName(identifier) {
 
 function mixinIdentifiers(UCA) {
   // Extend UCA Semantic
-  _.forEach(_.filter(definitions, (d) => d.credentialItem), (def) => {
+  _.forEach(_.filter(definitions, d => d.credentialItem), (def) => {
     const name = convertIdentifierToClassName(def.identifier);
     const source = {};
     const { identifier } = def;

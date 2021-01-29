@@ -10,7 +10,6 @@
     "check": "npm run lint && npm run test",
     "test": "jest",
     "lint": "eslint . --max-warnings=0",
-    "lint:fix": "npm run lint -- --fix",
     "test:watch": "jest --watch",
     "build:cjs": "BABEL_ENV=cjs babel src -d dist/cjs",
     "build:es": "babel src -d dist/es --no-babelrc",
@@ -27,37 +26,45 @@
   "author": "Identity.com Community",
   "license": "MIT",
   "dependencies": {
-    "flat": "^5.0.2",
-    "lodash": "^4.17.20",
+    "flat": "^4.1.0",
+    "lodash": "^4.17.11",
     "unix-timestamp": "^0.2.0",
-    "uuid": "^8.3.2"
+    "uuid": "^3.3.2",
+    "winston": "^3.1.0"
   },
   "devDependencies": {
     "audit-ci": "^3.1.1",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.24.1",
-    "babel-jest": "^26.6.3",
-    "babel-minify": "^0.5.1",
+    "babel-jest": "^24.8.0",
+    "babel-minify": "^0.4.3",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.1",
-    "eslint": "^7.17.0",
-    "eslint-config-airbnb": "^18.2.1",
-    "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-loader": "^4.0.2",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-no-only-tests": "^2.4.0",
-    "eslint-plugin-react": "^7.22.0",
-    "jest": "^26.6.3",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^17.0.0",
+    "eslint-config-airbnb-base": "^13.0.0",
+    "eslint-loader": "^2.0.0",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-no-only-tests": "^2.0.0",
+    "eslint-plugin-react": "^7.10.0",
+    "husky": "^1.1.2",
+    "jest": "^24.8.0",
+    "jest-html-reporter": "^2.3.0",
     "request-debug": "^0.2.0",
-    "rimraf": "^3.0.2"
+    "rimraf": "^2.6.2"
   },
   "jest": {
     "modulePathIgnorePatterns": [
       "<rootDir>/dist/"
     ],
     "collectCoverageFrom": [
-      "**/src/**/*.js"
+      "**/src/**/*.{js}",
+      "!**/node_modules/**",
+      "!**/build/**",
+      "!**/vendor/**",
+      "!src/services/DummyAnchorServiceImpl.js",
+      "!src/services/anchorService.js"
     ],
     "coverageThreshold": {
       "global": {
@@ -69,6 +76,7 @@
     },
     "coverageDirectory": "reports/coverage",
     "collectCoverage": true,
+    "testResultsProcessor": "./node_modules/jest-html-reporter",
     "verbose": true
   }
 }
