@@ -165,6 +165,9 @@ class UserCollectableAttribute {
       if (_.get(property, 'meta.type') === 'Number') {
         fixedValue.value = _.toNumber(item.value);
       }
+      if ((_.get(property, 'meta.type') === 'Boolean')) {
+        fixedValue.value = _.toString(item.value) === 'true';
+      }
 
       fixedValue.name = _.get(property, 'meta.propertyName');
 
