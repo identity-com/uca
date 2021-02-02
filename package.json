@@ -1,6 +1,6 @@
 {
   "name": "@identity.com/uca",
-  "version": "1.0.21",
+  "version": "1.0.22",
   "description": "Provides functionality around User Collectable Attributes (UCA)",
   "main": "src/index.js",
   "module": "dist/es/index.js",
@@ -30,7 +30,7 @@
     "flat": "^4.1.0",
     "lodash": "^4.17.11",
     "unix-timestamp": "^0.2.0",
-    "uuid": "^3.3.2",
+    "uuid": "^8.3.2",
     "winston": "^3.1.0"
   },
   "devDependencies": {
