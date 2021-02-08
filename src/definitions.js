@@ -1042,11 +1042,13 @@ const definitions = [
   },
   {
     identifier: 'cvc:Type:hasConnected',
+    version: '1',
     type: 'Boolean',
     credentialItem: false,
   },
   {
     identifier: 'cvc:Type:externalServiceAuth',
+    version: '1',
     type: {
       properties: [
         {
