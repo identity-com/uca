@@ -1175,6 +1175,13 @@ const definitions = [
     },
     credentialItem: true,
   },
+  {
+    identifier: 'cvc:Type:externalClientUserId',
+    description: 'External Client User Id',
+    version: '1',
+    type: 'String',
+    attestable: true,
+  },
 ];
 
 module.exports = definitions;

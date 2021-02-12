@@ -900,4 +900,19 @@ describe('UCA Constructions tests', () => {
       expect(ucaObject.identifier).toBe('cvc:Validation:evidences');
     });
   });
+
+  describe('UCA with Boolean value', () => {
+    describe('from fromFlattenValue', () => {
+      it('set value with boolean', () => {
+        expect(UCA.fromFlattenValue(
+          'cvc:Type:externalServiceAuth', [{ name: 'cvc:Type:hasConnected', value: true }],
+        ).getPlainValue()).toBeTruthy();
+      });
+    });
+    describe('from constructor', () => {
+      it('set value with boolean', () => expect(
+        new UCA('cvc:Type:externalServiceAuth', { hasConnected: true }),
+      ).toBeTruthy());
+    });
+  });
 });

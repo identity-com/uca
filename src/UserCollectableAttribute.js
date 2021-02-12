@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const timestamp = require('unix-timestamp');
-const uuidv4 = require('uuid/v4');
+const { v4: uuidv4 } = require('uuid');
 const flatten = require('flat');
 const definitions = require('./definitions');
 const {
