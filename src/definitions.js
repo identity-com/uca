@@ -1172,6 +1172,45 @@ const definitions = [
     type: 'String',
     attestable: true,
   },
+  {
+    identifier: 'cvc:Type:identityAuthId',
+    description: 'Auth identifier',
+    version: '1',
+    type: 'String',
+    attestable: false,
+    credentialItem: false,
+  },
+  {
+    identifier: 'cvc:Type:ImageRef',
+    version: '1',
+    type: {
+      properties: [
+        {
+          name: 's3FileRef',
+          type: 'cvc:Type:S3FileRef',
+        },
+        {
+          name: 'format', // base64 | IDScan
+          type: 'String',
+        },
+      ],
+    },
+  },
+  {
+    identifier: 'cvc:Type:DocumentImages',
+    version: '1',
+    type: 'Array',
+    items: {
+      type: 'cvc:Type:ImageRef',
+    },
+    credentialItem: false,
+  },
+  {
+    identifier: 'cvc:Type:SelfieImage',
+    version: '1',
+    type: 'cvc:Type:ImageRef',
+    credentialItem: false,
+  },
 ];
 
 module.exports = definitions;
