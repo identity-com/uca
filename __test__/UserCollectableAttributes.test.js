@@ -96,13 +96,13 @@ describe('UCA Constructions tests', () => {
     expect(createUCA).toThrow();
   });
 
-  test('Should not throw an error when constructing UCA with any document type', () => {
+  test('Should throw error when constructing UCA with a value not in the enum definition', () => {
     const identifier = 'cvc:Document:type';
-    const value = 'any-document-type';
+    const value = 'invalid-document-type';
     function createUCA() {
       return new UCA(identifier, value);
     }
-    expect(createUCA).not.toThrowError();
+    expect(createUCA).toThrowError();
   });
 
   test('Should construct UCA when value is in the enum definition', () => {
