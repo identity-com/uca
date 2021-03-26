@@ -670,6 +670,8 @@ describe('UCA Constructions tests', () => {
       ];
       const ucaObject = new UCA(identifier, value);
       const flat = ucaObject.getFlattenValue();
+      const unflatten = UCA.fromFlattenValue(identifier, flat);
+
       expect(flat).toBeDefined();
       expect(flat).toHaveLength(3);
       const expected = [
