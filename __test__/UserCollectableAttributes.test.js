@@ -672,23 +672,27 @@ describe('UCA Constructions tests', () => {
       const flat = ucaObject.getFlattenValue();
       const unflatten = UCA.fromFlattenValue(identifier, flat);
 
+      expect(unflatten).toBeDefined();
       expect(flat).toBeDefined();
       expect(flat).toHaveLength(3);
       const expected = [
         {
-          name: 'cvc:Test:records.0.cvc:Test:date',
-          value: '150000',
+          "name": "cvc:Test:records.0.testDate",
+          "value": "150000"
         },
         {
-          name: 'cvc:Test:records.0.cvc:Test:id',
-          value: 'cccc',
+          "name": "cvc:Test:records.0.testId",
+          "value": "cccc"
         },
         {
-          name: 'cvc:Test:records.0.cvc:Test:type',
-          value: 'ccc',
-        },
+          "name": "cvc:Test:records.0.type",
+          "value": "ccc"
+        }
       ];
       expect(flat).toEqual(expect.arrayContaining(expected));
+      const reflat = unflatten.getFlattenValue();
+      expect(reflat).toEqual(expect.arrayContaining(expected));
+
     });
 
     it('Handle Numbers in flatten/Unflatten  UCA', () => {
