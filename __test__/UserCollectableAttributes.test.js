@@ -667,6 +667,11 @@ describe('UCA Constructions tests', () => {
           testId: 'cccc',
           type: 'ccc',
         },
+        {
+          testDate: '250000',
+          testId: 'cccc2',
+          type: 'ccc2',
+        },
       ];
       const ucaObject = new UCA(identifier, value);
       const flat = ucaObject.getFlattenValue();
@@ -674,25 +679,36 @@ describe('UCA Constructions tests', () => {
 
       expect(unflatten).toBeDefined();
       expect(flat).toBeDefined();
-      expect(flat).toHaveLength(3);
+      expect(flat).toHaveLength(6);
       const expected = [
         {
-          "name": "cvc:Test:records.0.testDate",
-          "value": "150000"
+          name: 'cvc:Test:records.0.testDate',
+          value: '150000',
         },
         {
-          "name": "cvc:Test:records.0.testId",
-          "value": "cccc"
+          name: 'cvc:Test:records.0.testId',
+          value: 'cccc',
         },
         {
-          "name": "cvc:Test:records.0.type",
-          "value": "ccc"
-        }
+          name: 'cvc:Test:records.0.type',
+          value: 'ccc',
+        },
+        {
+          name: 'cvc:Test:records.1.testDate',
+          value: '250000',
+        },
+        {
+          name: 'cvc:Test:records.1.testId',
+          value: 'cccc2',
+        },
+        {
+          name: 'cvc:Test:records.1.type',
+          value: 'ccc2',
+        },
       ];
       expect(flat).toEqual(expect.arrayContaining(expected));
       const reflat = unflatten.getFlattenValue();
       expect(reflat).toEqual(expect.arrayContaining(expected));
-
     });
 
     it('Handle Numbers in flatten/Unflatten  UCA', () => {

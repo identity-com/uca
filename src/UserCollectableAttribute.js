@@ -175,7 +175,7 @@ class UserCollectableAttribute {
       }
        if ((_.get(property, 'meta.type') === 'Array')) {
         // We need to know what item index are we handling to avoid mixing properties
-        const itemNameWithIndex = item.name.substring(0,property.name.length+2);
+        const itemNameWithIndex = item.name.substring(0, property.name.length + 1);
          // In the values(parameter) could be more properties for the same array item, let's group it...
         const allArrayValues = _.filter(values, v => v.name.startsWith(itemNameWithIndex));
         // We need to force a parent property to host the array, going to use '$item'
