@@ -160,12 +160,10 @@ class UserCollectableAttribute {
       const fixedValue = _.cloneDeep(item);
       const nameComponents = _.split(item.name, '>');
       const name = nameComponents[0];
-      const sufix = nameComponents[1];
+      const suffix = nameComponents[1];
       const property = _.find(meta.properties,
-          (o) => {
-            return (_.get(o, 'meta.type') == 'Array' && name.startsWith(o.name)) ||
-                (o.name === name && (!sufix || _.includes(o.meta.propertyName, sufix)));
-      });
+        o => (_.get(o, 'meta.type') === 'Array' && name.startsWith(o.name))
+                || (o.name === name && (!suffix || _.includes(o.meta.propertyName, suffix))));
 
       if (_.get(property, 'meta.type') === 'Number') {
         fixedValue.value = _.toNumber(item.value);
@@ -173,23 +171,22 @@ class UserCollectableAttribute {
       if ((_.get(property, 'meta.type') === 'Boolean')) {
         fixedValue.value = _.toString(item.value) === 'true';
       }
-       if ((_.get(property, 'meta.type') === 'Array')) {
+      if ((_.get(property, 'meta.type') === 'Array')) {
         // We need to know what item index are we handling to avoid mixing properties
         const itemNameWithIndex = item.name.substring(0, property.name.length + 1);
-         // In the values(parameter) could be more properties for the same array item, let's group it...
+        // In the values(parameter) could be more properties for the same array item, let's group it...
         const allArrayValues = _.filter(values, v => v.name.startsWith(itemNameWithIndex));
         // We need to force a parent property to host the array, going to use '$item'
-        const nonPrefixedValues = _.map(allArrayValues, v => ({name: v.name.replace(`${property.name}.`, '$items.'), value: v.value}));
+        const nonPrefixedValues = _.map(allArrayValues, v => (
+          { name: v.name.replace(`${property.name}.`, '$items.'), value: v.value }));
         // We need to build a single flatten object with the flat lib format, let'' reduce the array into that object
-        const asFlatLibFormat = _.reduce(nonPrefixedValues, (a, v) => {
-          a[v.name]=v.value;
-          return a;
-          }, {} );
+        const asFlatLibFormat = _.reduce(nonPrefixedValues, (array, v) => {
+          const newArray = array;
+          newArray[v.name] = v.value;
+          return newArray;
+        }, {});
         // Now we can unflatten an array item with their properties
-        fixedValue.value = flatten.unflatten(asFlatLibFormat)['$items'];
-
-        // This is not safe - MESSING WITH the collection the we are iterating...
-         // but we don't want to handle same array item again
+        fixedValue.value = flatten.unflatten(asFlatLibFormat).$items;
         valuesToHandle = _.filter(valuesToHandle, v => !(_.includes(allArrayValues, v)));
       }
 
@@ -222,13 +219,13 @@ class UserCollectableAttribute {
       // _.each(this.value, (item, index) => {
       //   item.getFlattenValue(accumulator, suffix, `${parentIdentifier}.${index}.`);
       // });
-      const items = flatten(this.getPlainValue() );
+      const items = flatten(this.getPlainValue());
       _.each(items, (v, k) => {
         accumulator.push({
-          name:`${prefix || ''}${this.identifier}${suffix || ''}.${k}`,
+          name: `${prefix || ''}${this.identifier}${suffix || ''}.${k}`,
           value: _.toString(v),
         });
-      })
+      });
     } else {
       accumulator.push({
         name: `${prefix || ''}${this.identifier}${suffix || ''}`,
