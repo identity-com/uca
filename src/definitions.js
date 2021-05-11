@@ -1183,6 +1183,14 @@ const definitions = [
     type: 'String',
     attestable: true,
   },
+  {
+    identifier: 'cvc:Type:appId',
+    description: 'Application Identifier',
+    version: '1',
+    type: 'String',
+    attestable: false,
+    credentialItem: false,
+  },
 ];
 
 module.exports = definitions;
