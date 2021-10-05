@@ -1191,6 +1191,33 @@ const definitions = [
     attestable: false,
     credentialItem: false,
   },
+  {
+    identifier: 'cvc:Type:appIdType',
+    description: 'Application Identifier Type',
+    version: '1',
+    type: 'String',
+    attestable: false,
+    credentialItem: false,
+  },
+  {
+    identifier: 'cvc:Document:appId',
+    version: '1',
+    type: {
+      properties: [
+        {
+          name: 'appId',
+          type: 'cvc:Type:appId',
+        },
+        {
+          name: 'appIdType',
+          type: 'cvc:Type:appIdType',
+        },
+      ],
+      required: ['appId'],
+    },
+    attestable: false,
+    credentialItem: false,
+  },
 ];
 
 module.exports = definitions;
